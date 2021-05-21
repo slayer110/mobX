@@ -19,11 +19,9 @@ class organizationsStore {
             res => res.json()
         ).then(records => {
             records.title = records.title.split(" ");
-            this.organizations[chatId].saveOrganizations(records);
             this.organizations[chatId].isLoading = false;
             this.organizations[chatId].isError = false;
-            console.log(this.organizations[chatId])
-
+            this.organizations[chatId].list = records.title;
         }).catch(() => {
             this.organizations[chatId].isLoading = false;
             this.organizations[chatId].isError = true;

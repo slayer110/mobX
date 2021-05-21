@@ -16,11 +16,11 @@ const QrganizationListView = observer(() => {
     };
 
     return <div style={organizationsStyle}>
+        {console.log(organizationsStore.activeOrganizations?.list)}
         {organizationsStore.activeOrganizations?.isLoading && <LoadingComponent/>}
         {organizationsStore.activeOrganizations?.error && <ErrorComponent/>}
-        {organizationsStore.activeOrganizations?.isLoading || organizationsStore.activeOrganizations?.error ||
         <div>{organizationsStore.activeOrganizations?.list?.map((elem, i) => <OrganizationView
-            key={i} orgId={i} organization={elem}/>)}</div>}
+            key={i} orgId={i} organization={elem}/>)}</div>
     </div>
 
 });
