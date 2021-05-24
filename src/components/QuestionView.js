@@ -3,7 +3,8 @@ import {useStore} from "../store/use-store";
 import {observer} from "mobx-react";
 
 const QuestionView=observer(()=> {
-    const {questionStore}=useStore();
+    const {questionStore} = useStore();
+
     const questionsStyle = {
         width: '587px',
         height: '800px',

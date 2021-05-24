@@ -6,7 +6,7 @@ class ChatStore {
 
     active = null;
 
-    constructor(questionsStore) {
+    constructor() {
         makeAutoObservable(this);
     }
 
@@ -20,6 +20,7 @@ class ChatStore {
         const chatId = this.data.length + 1;
         if (this.data.length === 0) {
             this.active = chatId;
+            PubSub.publish('chatActiveId', this.active);
         }
         this.data.push({chatId, name: `${this.data.length+1} Чат`})
         PubSub.publish('chatsData', this.data);

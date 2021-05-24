@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx";
 import {Question} from "./entities/question/question";
+import PubSub from "pubsub-js";
 
 class QuestionStore {
     questions = {};
@@ -8,37 +9,28 @@ class QuestionStore {
 
     constructor(chatsStore) {
         makeAutoObservable(this);
-        this.chatsStore = chatsStore;
+        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.activeChatId = chatActiveId)
     }
 
     loadQuestion(idOrg) {
         this.active = idOrg;
 
-        if (this.questions[this.chatsStore.active]) {
-            this.questions[this.chatsStore.active][this.active] = new Question()
-        }
-
-        if (this.questions[this.chatsStore.active]) {
-            this.questions[this.chatsStore.active][this.active].isLoading = true;
-        }
+        this.questions[this.activeChatId] = {}
+        this.questions[this.activeChatId][this.active] = new Question();
+        this.questions[this.activeChatId][this.active].fetchQuestion();
         fetch(`https://jsonplaceholder.typicode.com/todos/${idOrg}`).then(
             res => res.json()
         ).then(record => {
-                if (this.questions[this.chatsStore.active]) {
-                    this.questions[this.chatsStore.active][this.active].isLoading = false;
-                    this.questions[this.chatsStore.active][this.activeChatId].text = record;
-                }
+                this.questions[this.activeChatId][this.active].saveQuestion(record);
             }
-        ).catch(() => {
-            if (this.questions[this.chatsStore.active]) {
-                this.questions[this.activeChatId][this.active].isLoading = false;
-                this.questions[this.activeChatId][this.active].isError = true;
-            }
-        })
+        )
+            .catch(() => {
+                this.questions[this.activeChatId][this.active].fetchError();
+            });
     }
 
     get activeQuestion() {
-        return this.questions[this.chatsStore.active] && this.questions[this.chatsStore.active][this.active]
+        return this.questions[this.activeChatId] && this.questions[this.activeChatId][this.active]
     }
 
 }

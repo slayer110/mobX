@@ -5,12 +5,14 @@ import PubSub from "pubsub-js";
 
 class organizationsStore {
     organizations = {};
+    activeChat=''
 
     constructor() {
         makeAutoObservable(this);
 
         // Изменить отслеживаемое значение
         PubSub.subscribe('chatsData', (msg, chatsData) => this.loadOrganizations(chatsData[chatsData.length - 1].chatId))
+        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.activeChat = chatActiveId)
     }
 
     loadOrganizations = (chatId) => {
@@ -28,9 +30,7 @@ class organizationsStore {
 
 
     get activeOrganizations() {
-        // console.log(this.organizations);
-        // return 'jjjj'
-        return PubSub.subscribe('chatActiveId', (msg, chatActiveId) =>console.log(chatActiveId))
+        return this.organizations[this.activeChat]
     }
 }
 
