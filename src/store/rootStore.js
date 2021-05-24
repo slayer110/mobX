@@ -3,8 +3,8 @@ import OrganizationsStore from "./organizationsStore";
 import QuestionStore from "./questionStore";
 
 class RootStore {
+    organizationsStore = new OrganizationsStore();
     chatStore = new ChatStore();
-    organizationsStore = new OrganizationsStore(this.chatStore);
     questionStore = new QuestionStore(this.chatStore);
 }
 

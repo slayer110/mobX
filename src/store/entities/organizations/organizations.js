@@ -1,10 +1,28 @@
-import {makeAutoObservable} from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export class Organizations {
-    list = [];
-    isLoading = true;
+    isLoading = false;
     isError = false;
-    constructor(){
-        makeAutoObservable(this)
+    isSuccess = false;
+    list = [];
+
+    constructor() {
+        makeAutoObservable(this);
+    }
+
+    fetchList() {
+        this.isLoading = true;
+        this.list = [];
+    }
+
+    saveList(list) {
+        this.isLoading = false;
+        this.isSuccess = true;
+        this.list = list;
+    }
+
+    fetchError() {
+        this.isLoading = false;
+        this.isError = true;
     }
 }

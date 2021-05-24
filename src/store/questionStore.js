@@ -4,6 +4,7 @@ import {Question} from "./entities/question/question";
 class QuestionStore {
     questions = {};
     active = '';
+    activeChatId = ''
 
     constructor(chatsStore) {
         makeAutoObservable(this);
@@ -12,17 +13,29 @@ class QuestionStore {
 
     loadQuestion(idOrg) {
         this.active = idOrg;
+
+        if (this.questions[this.chatsStore.active]) {
+            this.questions[this.chatsStore.active][this.active] = new Question()
+        }
+
+        if (this.questions[this.chatsStore.active]) {
+            this.questions[this.chatsStore.active][this.active].isLoading = true;
+        }
         fetch(`https://jsonplaceholder.typicode.com/todos/${idOrg}`).then(
             res => res.json()
-        ).then(record => this.updateQuestion(record, this.chatsStore.active, idOrg)
-        ).catch()
+        ).then(record => {
+                if (this.questions[this.chatsStore.active]) {
+                    this.questions[this.chatsStore.active][this.active].isLoading = false;
+                    this.questions[this.chatsStore.active][this.activeChatId].text = record;
+                }
+            }
+        ).catch(() => {
+            if (this.questions[this.chatsStore.active]) {
+                this.questions[this.activeChatId][this.active].isLoading = false;
+                this.questions[this.activeChatId][this.active].isError = true;
+            }
+        })
     }
-
-    updateQuestion = (record, chatId, idOrg) => {
-        let question = new Question(record);
-        this.questions[chatId] = {};
-        this.questions[chatId][idOrg] = question
-    };
 
     get activeQuestion() {
         return this.questions[this.chatsStore.active] && this.questions[this.chatsStore.active][this.active]
