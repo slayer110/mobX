@@ -8,7 +8,7 @@ import LoadingComponent from "./common/LoadingView"
 const QrganizationListView = observer(() => {
     const {organizationsStore} = useStore();
     const organizationsStyle = {
-        width: '50%',
+        width: '30%',
         height: '800px',
         border: '1px black solid',
         display: 'inline-block',

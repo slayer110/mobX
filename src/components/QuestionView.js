@@ -6,7 +6,7 @@ const QuestionView=observer(()=> {
     const {questionStore} = useStore();
 
     const questionsStyle = {
-        width: '587px',
+        width: '400px',
         height: '800px',
         border: '1px black solid',
         display: 'inline-block',
