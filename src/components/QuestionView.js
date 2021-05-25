@@ -12,6 +12,7 @@ const QuestionView=observer(()=> {
         display: 'inline-block',
         overflowY: 'auto'
     };
+    console.log('sss')
 
     const titleStyle={
         textAlign:'center',

@@ -4,46 +4,46 @@ import PubSub from "pubsub-js";
 
 class QuestionStore {
     questions = {};
-    activeOrg = '';
+    activeOrgId = '';
     activeChatId = ''
 
     constructor() {
         makeAutoObservable(this);
 
-        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.changeActiveChatId(msg, chatActiveId));
-        PubSub.subscribe('activeOrgId', (msg, activeOrgId) => {
-            this.changeActiveOrgId(msg, activeOrgId);
-            !(this.questions[this.activeChatId] && this.questions[this.activeChatId][this.activeOrg]) && this.loadQuestion()
+        PubSub.subscribe('chatActiveId', (msg, id) => this.saveActiveChatId(msg, id));
+        PubSub.subscribe('activeOrgId', (msg, id) => {
+            this.saveActiveOrgId(msg, id);
+            !(this.questions[this.activeChatId] && this.questions[this.activeChatId][this.activeOrgId]) && this.loadQuestion()
         })
     }
 
-    changeActiveChatId(msg, chatActiveId) {
-        this.activeChat = chatActiveId
+    saveActiveChatId(msg, id) {
+        this.activeChatId = id
     }
 
-    changeActiveOrgId(msg, chatActiveId) {
-        this.activeOrg = chatActiveId;
+    saveActiveOrgId(msg, id) {
+        this.activeOrgId = id;
     }
 
     loadQuestion() {
         if (!this.questions[this.activeChatId]) {
             this.questions[this.activeChatId] = {}
         }
-        this.questions[this.activeChatId][this.activeOrg] = new Question();
-        this.questions[this.activeChatId][this.activeOrg].fetchQuestion();
-        fetch(`https://jsonplaceholder.typicode.com/todos/${this.activeOrg}`).then(
+        this.questions[this.activeChatId][this.activeOrgId] = new Question();
+        this.questions[this.activeChatId][this.activeOrgId].fetchQuestion();
+        fetch(`https://jsonplaceholder.typicode.com/todos/${this.activeOrgId}`).then(
             res => res.json()
         ).then(record => {
-                this.questions[this.activeChatId][this.activeOrg].saveQuestion(record);
+                this.questions[this.activeChatId][this.activeOrgId].saveQuestion(record);
             }
         )
             .catch(() => {
-                this.questions[this.activeChatId][this.activeOrg].fetchError();
+                this.questions[this.activeChatId][this.activeOrgId].fetchError();
             });
     }
 
     get activeQuestion() {
-        return this.questions[this.activeChatId] && this.questions[this.activeChatId][this.activeOrg]
+        return this.questions[this.activeChatId] && this.questions[this.activeChatId][this.activeOrgId]
     }
 
 }

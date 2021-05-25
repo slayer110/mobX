@@ -14,11 +14,11 @@ class OrganizationsStore {
         // Изменить отслеживаемое значение
         PubSub.subscribe('chatsData', (msg, lastChatId) => this.loadOrganizations(lastChatId))
 
-        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.changeActiveChatId(msg,chatActiveId))
+        PubSub.subscribe('chatActiveId', (msg, id) => this.saveActiveChatId(id))
     }
 
-    changeActiveChatId(msg, chatActiveId) {
-        this.activeChat = chatActiveId
+    saveActiveChatId(id) {
+        this.activeChat = id
     }
 
     selectOrg=(orgId)=> {
@@ -43,6 +43,12 @@ class OrganizationsStore {
     get activeOrganizations() {
         return this.organizations[this.activeChat] || new Organizations()
     }
+
+    getOrganizationsFile=()=>{
+        PubSub.publish('activeOrgIdForFile', this.activeOrgId)
+    }
+
+
 }
 
 export default OrganizationsStore;

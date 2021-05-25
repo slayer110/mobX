@@ -4,8 +4,8 @@ import QuestionStore from "./questionStore";
 
 class RootStore {
     chatStore = new ChatStore();
-    organizationsStore = new OrganizationsStore();
     questionStore = new QuestionStore();
+    organizationsStore = new OrganizationsStore(this.questionStore);
 }
 
 export default RootStore;
