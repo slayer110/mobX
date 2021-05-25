@@ -12,7 +12,13 @@ const QuestionView=observer(()=> {
         display: 'inline-block',
         overflowY: 'auto'
     };
+
+    const titleStyle={
+        textAlign:'center',
+    };
+
     return <div style={questionsStyle}>
+        <div style={titleStyle}><h1>Вопросы</h1></div>
         {questionStore.activeQuestion?.text}
     </div>
 });

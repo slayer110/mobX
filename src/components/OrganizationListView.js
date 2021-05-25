@@ -15,7 +15,12 @@ const QrganizationListView = observer(() => {
         overflowY: 'hidden'
     };
 
+    const titleStyle={
+        textAlign:'center',
+    };
+
     return <div style={organizationsStyle}>
+        <div style={titleStyle}><h1>Организации</h1></div>
         {organizationsStore.activeOrganizations.isLoading && <LoadingComponent/>}
         {organizationsStore.activeOrganizations.error && <ErrorComponent/>}
 
