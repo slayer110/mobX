@@ -7,8 +7,11 @@ class QuestionStore {
     activeOrgId = '';
     activeChatId = '';
 
-    constructor() {
+    fileStore = null;
+
+    constructor(fileStore) {
         makeAutoObservable(this);
+        this.fileStore = fileStore;
 
         PubSub.subscribe('chatActiveId', (msg, id) =>
             this.saveActiveChatId(msg, id)
@@ -20,6 +23,13 @@ class QuestionStore {
                 this.questions[this.activeChatId][this.activeOrgId]
             ) && this.loadQuestion();
         });
+    }
+
+    get activeQuestion() {
+        return (
+            this.questions[this.activeChatId] &&
+            this.questions[this.activeChatId][this.activeOrgId]
+        );
     }
 
     saveActiveChatId(msg, id) {
@@ -52,11 +62,8 @@ class QuestionStore {
             });
     }
 
-    get activeQuestion() {
-        return (
-            this.questions[this.activeChatId] &&
-            this.questions[this.activeChatId][this.activeOrgId]
-        );
+    updateComment(comment) {
+        this.activeQuestion.comment = comment;
     }
 }
 

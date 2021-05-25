@@ -20,7 +20,7 @@ const QuestionView = observer(() => {
             <div style={titleStyle}>
                 <h1>Вопросы</h1>
             </div>
-            {questionStore.activeQuestion?.text}
+            {questionStore.activeQuestion}
         </div>
     );
 });
