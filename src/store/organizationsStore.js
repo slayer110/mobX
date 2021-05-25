@@ -3,16 +3,27 @@ import {Organizations} from './entities/organizations/organizations'
 import PubSub from "pubsub-js";
 
 
-class organizationsStore {
+class OrganizationsStore {
     organizations = {};
     activeChat=''
+    activeOrgId = '';
 
     constructor() {
         makeAutoObservable(this);
 
         // Изменить отслеживаемое значение
-        PubSub.subscribe('chatsData', (msg, chatsData) => this.loadOrganizations(chatsData[chatsData.length - 1].chatId))
-        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.activeChat = chatActiveId)
+        PubSub.subscribe('chatsData', (msg, lastChatId) => this.loadOrganizations(lastChatId))
+
+        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.changeActiveChatId(msg,chatActiveId))
+    }
+
+    changeActiveChatId(msg, chatActiveId) {
+        this.activeChat = chatActiveId
+    }
+
+    selectOrg=(orgId)=> {
+        this.activeOrgId = orgId;
+        PubSub.publish('activeOrgId', this.activeOrgId)
     }
 
     loadOrganizations = (chatId) => {
@@ -30,8 +41,8 @@ class organizationsStore {
 
 
     get activeOrganizations() {
-        return this.organizations[this.activeChat]
+        return this.organizations[this.activeChat] || new Organizations()
     }
 }
 
-export default organizationsStore;
+export default OrganizationsStore;

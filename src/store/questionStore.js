@@ -4,33 +4,46 @@ import PubSub from "pubsub-js";
 
 class QuestionStore {
     questions = {};
-    active = '';
+    activeOrg = '';
     activeChatId = ''
 
-    constructor(chatsStore) {
+    constructor() {
         makeAutoObservable(this);
-        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.activeChatId = chatActiveId)
+
+        PubSub.subscribe('chatActiveId', (msg, chatActiveId) => this.changeActiveChatId(msg, chatActiveId));
+        PubSub.subscribe('activeOrgId', (msg, activeOrgId) => {
+            this.changeActiveOrgId(msg, activeOrgId);
+            !(this.questions[this.activeChatId] && this.questions[this.activeChatId][this.activeOrg]) && this.loadQuestion()
+        })
     }
 
-    loadQuestion(idOrg) {
-        this.active = idOrg;
+    changeActiveChatId(msg, chatActiveId) {
+        this.activeChat = chatActiveId
+    }
 
-        this.questions[this.activeChatId] = {}
-        this.questions[this.activeChatId][this.active] = new Question();
-        this.questions[this.activeChatId][this.active].fetchQuestion();
-        fetch(`https://jsonplaceholder.typicode.com/todos/${idOrg}`).then(
+    changeActiveOrgId(msg, chatActiveId) {
+        this.activeOrg = chatActiveId;
+    }
+
+    loadQuestion() {
+        if (!this.questions[this.activeChatId]) {
+            this.questions[this.activeChatId] = {}
+        }
+        this.questions[this.activeChatId][this.activeOrg] = new Question();
+        this.questions[this.activeChatId][this.activeOrg].fetchQuestion();
+        fetch(`https://jsonplaceholder.typicode.com/todos/${this.activeOrg}`).then(
             res => res.json()
         ).then(record => {
-                this.questions[this.activeChatId][this.active].saveQuestion(record);
+                this.questions[this.activeChatId][this.activeOrg].saveQuestion(record);
             }
         )
             .catch(() => {
-                this.questions[this.activeChatId][this.active].fetchError();
+                this.questions[this.activeChatId][this.activeOrg].fetchError();
             });
     }
 
     get activeQuestion() {
-        return this.questions[this.activeChatId] && this.questions[this.activeChatId][this.active]
+        return this.questions[this.activeChatId] && this.questions[this.activeChatId][this.activeOrg]
     }
 
 }

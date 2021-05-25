@@ -11,7 +11,9 @@ const style = {
 
 function AddChatButton(props) {
     const {handlerAddChat} = props;
-    return <button onClick={handlerAddChat} style={style}>Добавить чат</button>
+    return <button onClick={handlerAddChat} style={style}>
+        Добавить чат
+    </button>
 }
 
 export default AddChatButton
