@@ -1,15 +1,17 @@
-import {makeAutoObservable} from "mobx";
-import PubSub from "pubsub-js";
+import { makeAutoObservable } from 'mobx';
+import PubSub from 'pubsub-js';
 
 export class Question {
     isLoading = false;
     isError = false;
     isSuccess = false;
-    data = {id: '', title: '', file: null}
+    data = { id: '', title: '', file: null };
 
     constructor() {
         makeAutoObservable(this);
-        PubSub.subscribe('activeOrgIdForFile', (msg, activeOrg) => this.getFile(activeOrg))
+        PubSub.subscribe('activeOrgIdForFile', (msg, activeOrg) =>
+            this.getFile(activeOrg)
+        );
     }
 
     fetchQuestion() {
@@ -18,7 +20,7 @@ export class Question {
     }
 
     saveQuestion(record) {
-        this.data = {...this.data, title: record.title};
+        this.data = { ...this.data, title: record.title };
         this.isLoading = false;
         this.isSuccess = true;
     }
@@ -31,9 +33,8 @@ export class Question {
     getFile(activeOrgId) {
         let file = new File();
         file.getFile(activeOrgId);
-        this.data = {...this.data, file}
+        this.data = { ...this.data, file };
     }
-
 }
 
 class File {
@@ -50,16 +51,15 @@ class File {
         this.isLoading = true;
         this.isError = false;
 
-        fetch(`https://jsonplaceholder.typicode.com/todos/${activeOrg}`).then(
-            res => res.json()
-        ).then(record => {
+        fetch(`https://jsonplaceholder.typicode.com/todos/${activeOrg}`)
+            .then((res) => res.json())
+            .then((record) => {
                 this.fileTitle = record.title;
                 this.isLoading = false;
-            }
-        ).catch((error) => {
-            this.isError = true;
-            this.isLoading = false;
-        });
+            })
+            .catch((error) => {
+                this.isError = true;
+                this.isLoading = false;
+            });
     }
-
 }

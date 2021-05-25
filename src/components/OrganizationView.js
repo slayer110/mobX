@@ -1,19 +1,27 @@
 import React from 'react';
-import {useStore} from '../store/use-store'
-import {observer} from "mobx-react";
+import { useStore } from '../store/use-store';
+import { observer } from 'mobx-react';
 
-export const OrganizationView=observer((props)=> {
-    const {organization, orgId} = props;
-    const {organizationsStore: {selectOrg, activeOrgId, getOrganizationsFile}} = useStore();
-    const organizationStyle = {border: '1px grey solid', height: '50px', borderRadius: '10px'};
+export const OrganizationView = observer((props) => {
+    const { organization, orgId } = props;
+    const {
+        organizationsStore,
+    } = useStore();
+    const organizationStyle = {
+        border: '1px grey solid',
+        height: '50px',
+        borderRadius: '10px',
+    };
 
-    return <>
-        <div onClick={() => selectOrg(orgId)} style={{
-            ...organizationStyle,
-            backgroundColor: `${activeOrgId === orgId ? 'grey' : 'white'}`
-        }}>{organization}
-            {activeOrgId === orgId && <button onClick={()=>getOrganizationsFile()}>Загрузить файл</button>}
+    return (
+        <div
+            onClick={() => organizationsStore.selectOrg(orgId)}
+            style={{
+                ...organizationStyle,
+                backgroundColor: `${organizationsStore.activeOrgId === orgId ? 'grey' : 'white'}`,
+            }}
+        >
+            {organization}
         </div>
-    </>
+    );
 });
-

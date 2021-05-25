@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import RootStore from "./store/rootStore"
-import {RootStoreContext} from "./store/use-store"
+import RootStore from './store/rootStore';
+import { RootStoreContext } from './store/use-store';
 
 ReactDOM.render(
     <React.StrictMode>
         <RootStoreContext.Provider value={new RootStore()}>
-            <App/>
+            <App />
         </RootStoreContext.Provider>
     </React.StrictMode>,
 

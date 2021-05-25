@@ -1,6 +1,6 @@
-import ChatStore from "./chatStore";
-import OrganizationsStore from "./organizationsStore";
-import QuestionStore from "./questionStore";
+import ChatStore from './chatStore';
+import OrganizationsStore from './organizationsStore';
+import QuestionStore from './questionStore';
 
 class RootStore {
     chatStore = new ChatStore();

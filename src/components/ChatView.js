@@ -9,11 +9,18 @@ const style = {
 };
 
 function ChatView(props) {
-    const {info, active, onClick} = props;
-    return <div onClick={() => onClick(info.chatId)} style={{
-        ...style,
-        backgroundColor: `${info.chatId === active ? 'red' : ''}`
-    }}>{info.name}</div>
+    const { info, active, onClick } = props;
+    return (
+        <div
+            onClick={() => onClick(info.chatId)}
+            style={{
+                ...style,
+                backgroundColor: `${info.chatId === active ? 'red' : ''}`,
+            }}
+        >
+            {info.name}
+        </div>
+    );
 }
 
-export default React.memo(ChatView)
+export default React.memo(ChatView);
