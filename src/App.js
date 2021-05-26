@@ -6,6 +6,7 @@ import QuestionView from './components/QuestionView';
 import Chat from './components/ChatView';
 import AddChatButton from './components/AddChatButton';
 import { useStore } from './store/use-store';
+import FileView from "./components/FileView";
 
 const chatsBoxStyle = {
     height: '800px',
@@ -33,6 +34,7 @@ const App = observer(() => {
             </div>
             <Organizations />
             <QuestionView />
+            <FileView/>
             <AddChatButton handlerAddChat={chatStore.addNewChat} />
         </div>
     );

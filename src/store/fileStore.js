@@ -1,7 +1,6 @@
-import { makeAutoObservable } from 'mobx';
-import PubSub from 'pubsub-js';
+import {makeAutoObservable} from 'mobx';
 
-export class FileStore {
+export default class FileStore {
     isLoading = false;
     isSuccess = false;
     isError = false;
@@ -17,16 +16,18 @@ export class FileStore {
 
     getFileByQuestionId(questionId) {
         this.isLoading = true;
-        fetch(`https://jsonplaceholder.typicode.com/posts/${questionId}`)
+
+        setTimeout(() => fetch(`https://jsonplaceholder.typicode.com/posts/${questionId}`)
             .then((res) => res.json())
             .then((record) => {
                 console.warn('fileStore => ', record);
+                this.file = {...this.file, name: record.title}
                 this.isSuccess = true;
             })
             .catch((error) => {
                 this.isError = true;
             }).finally(() => {
                 this.isLoading = false;
-        });
+            }), 10000);
     }
 }

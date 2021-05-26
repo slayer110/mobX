@@ -1,11 +1,13 @@
 import ChatStore from './chatStore';
 import OrganizationsStore from './organizationsStore';
 import QuestionStore from './questionStore';
+import FileStore from './fileStore';
 
 class RootStore {
     chatStore = new ChatStore();
-    questionStore = new QuestionStore();
-    organizationsStore = new OrganizationsStore(this.questionStore);
+    fileStore = new FileStore();
+    questionStore = new QuestionStore(this.fileStore);
+    organizationsStore = new OrganizationsStore();
 }
 
 export default RootStore;

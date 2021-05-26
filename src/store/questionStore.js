@@ -1,5 +1,5 @@
-import { makeAutoObservable } from 'mobx';
-import { Question } from './entities/question/question';
+import {makeAutoObservable} from 'mobx';
+import {Question} from './entities/question/question';
 import PubSub from 'pubsub-js';
 
 class QuestionStore {
@@ -46,24 +46,28 @@ class QuestionStore {
         }
 
         this.questions[this.activeChatId][this.activeOrgId] = new Question();
-        this.questions[this.activeChatId][this.activeOrgId].fetchQuestion();
 
         fetch(`https://jsonplaceholder.typicode.com/todos/${this.activeOrgId}`)
             .then((res) => res.json())
             .then((record) => {
                 this.questions[this.activeChatId][
                     this.activeOrgId
-                ].saveQuestion(record);
+                    ].saveQuestion(record);
             })
             .catch(() => {
                 this.questions[this.activeChatId][
                     this.activeOrgId
-                ].fetchError();
+                    ].fetchError();
             });
     }
 
     updateComment(comment) {
         this.activeQuestion.comment = comment;
+    }
+
+    getFile = () => {
+        // Как связать Question с FileStore, чтобы сущность File входила в Question?
+        // Или связь с помощью eventbus так же как и в OrganizationStore с ChatsStore?
     }
 }
 
