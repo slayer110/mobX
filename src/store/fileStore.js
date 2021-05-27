@@ -1,17 +1,13 @@
 import {makeAutoObservable} from 'mobx';
+import PubSub from 'pubsub-js';
 
 export default class FileStore {
-    isLoading = false;
-    isSuccess = false;
-    isError = false;
-    file = {
-        id: '',
-        name: '',
-        type: '',
-    };
+
+    files = {}
 
     constructor() {
         makeAutoObservable(this);
+        PubSub.subscribe('activeQuestionId', (msg,activeId)=>this.getFileByQuestionId(activeId))
     }
 
     getFileByQuestionId(questionId) {
@@ -21,7 +17,7 @@ export default class FileStore {
             .then((res) => res.json())
             .then((record) => {
                 console.warn('fileStore => ', record);
-                this.file = {...this.file, name: record.title}
+                this.files = {...this.file, name: record.title}
                 this.isSuccess = true;
             })
             .catch((error) => {

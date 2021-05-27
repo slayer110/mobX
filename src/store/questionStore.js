@@ -6,8 +6,7 @@ class QuestionStore {
     questions = {};
     activeOrgId = '';
     activeChatId = '';
-
-    fileStore = null;
+    activeId = '';
 
     constructor(fileStore) {
         makeAutoObservable(this);
@@ -53,6 +52,7 @@ class QuestionStore {
                 this.questions[this.activeChatId][
                     this.activeOrgId
                     ].saveQuestion(record);
+                PubSub.publish('activeQuestionId', this.activeQuestionId = record.id)
             })
             .catch(() => {
                 this.questions[this.activeChatId][
