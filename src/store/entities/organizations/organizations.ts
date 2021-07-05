@@ -15,7 +15,7 @@ export class Organizations {
         this.list = [];
     }
 
-    saveList(list) {
+    saveList(list:any) {
         this.isLoading = false;
         this.isSuccess = true;
         this.list = list;

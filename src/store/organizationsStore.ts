@@ -1,32 +1,32 @@
-import { makeAutoObservable } from 'mobx';
-import { Organizations } from './entities/organizations/organizations';
+import {makeAutoObservable} from 'mobx';
+import {Organizations} from './entities/organizations/organizations';
 import PubSub from 'pubsub-js';
 
 class OrganizationsStore {
-    organizations = {};
+    organizations: any = {};
     activeChat = '';
     activeOrgId = '';
 
     constructor() {
         makeAutoObservable(this);
-        PubSub.subscribe('chatsData', (msg, lastChatId) =>
+        PubSub.subscribe('chatsData', (msg: any, lastChatId: any) =>
             this.loadOrganizations(lastChatId)
         );
-        PubSub.subscribe('chatActiveId', (msg, id) =>
+        PubSub.subscribe('chatActiveId', (msg:any, id: any) =>
             this.saveActiveChatId(id)
         );
     }
 
-    saveActiveChatId(id) {
+    saveActiveChatId(id: any) {
         this.activeChat = id;
     }
 
-    selectOrg = (orgId) => {
+    selectOrg = (orgId: any) => {
         this.activeOrgId = orgId;
         PubSub.publish('activeOrgId', this.activeOrgId);
     };
 
-    loadOrganizations = (chatId) => {
+    loadOrganizations = (chatId: any) => {
         this.organizations[chatId] = new Organizations();
         this.organizations[chatId].fetchList();
 

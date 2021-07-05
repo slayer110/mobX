@@ -1,8 +1,9 @@
 import { createContext, useContext } from 'react';
 
-export const RootStoreContext = createContext();
+// @ts-ignore
+export const RootStoreContext: any = createContext();
 
-export const useStore = () => {
+export const useStore = ():any => {
     const context = useContext(RootStoreContext);
     if (!context) {
         throw new Error('You have forgotten to add RootStoreContext value');

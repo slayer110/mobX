@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import '../../../App.css';
 
 const style = {
     height: '100px',
@@ -8,8 +8,9 @@ const style = {
     cursor: 'pointer',
 };
 
-function ChatView(props) {
-    const { info, active, onClick } = props;
+const ChatView = (props: any) => {
+    const {info, active, onClick} = props;
+
     return (
         <div
             onClick={() => onClick(info.chatId)}

@@ -14,7 +14,7 @@ export class File {
         makeAutoObservable(this);
     }
 
-    saveQuestion(record) {
+    saveQuestion(record: any) {
         this.file = {...this.file, id: record.id, name: record.title};
         this.isLoading = false;
         this.isSuccess = true;

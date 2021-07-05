@@ -1,4 +1,4 @@
-import ChatStore from './chatStore';
+import { ChatStore } from '../modules/chat/store/chatStore';
 import OrganizationsStore from './organizationsStore';
 import QuestionStore from './questionStore';
 import FileStore from './fileStore';

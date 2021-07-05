@@ -10,7 +10,7 @@ export class Question {
         makeAutoObservable(this);
     }
 
-    saveQuestion(record) {
+    saveQuestion(record: any) {
         this.data = {...this.data, id: record.id, name: record.title};
         this.isLoading = false;
         this.isSuccess = true;

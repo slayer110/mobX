@@ -1,29 +1,30 @@
 import React from 'react';
 import './App.css';
-import { observer } from 'mobx-react-lite';
-import Organizations from './components/OrganizationListView';
+import {observer} from 'mobx-react-lite';
+import Organizations from './modules/chat/ui/CorrespondenceAreaView';
 import QuestionView from './components/QuestionView';
-import Chat from './components/ChatView';
+import Chat from './modules/chat/ui/ChatView';
 import AddChatButton from './components/AddChatButton';
-import { useStore } from './store/use-store';
+import {useStore} from './store/use-store';
 import FileView from "./components/FileView";
+import CorrespondenceAreaView from "./modules/chat/ui/CorrespondenceAreaView";
 
-const chatsBoxStyle = {
-    height: '800px',
+const chatsBoxStyle: any = {
+    height: '100%',
     width: '10%',
     border: '1px solid black',
     overflowY: 'auto',
     display: 'inline-block',
 };
-const containerStyle = { width: '1500px', minHeight: '100%' };
+const containerStyle: any = {width: '100%', height: '98vh', display:'flex'};
 
 const App = observer(() => {
-    const { chatStore } = useStore();
+    const {chatStore}: any = useStore();
 
     return (
         <div style={containerStyle}>
             <div style={chatsBoxStyle}>
-                {chatStore.data.map((elem, i) => (
+                {chatStore.data.map((elem: any, i: number) => (
                     <Chat
                         onClick={chatStore.changeActiveChat}
                         key={i}
@@ -32,10 +33,10 @@ const App = observer(() => {
                     />
                 ))}
             </div>
-            <Organizations />
-            <QuestionView />
-            <FileView/>
-            <AddChatButton handlerAddChat={chatStore.addNewChat} />
+            <CorrespondenceAreaView/>
+            {/*<QuestionView/>*/}
+            {/*<FileView/>*/}
+            <AddChatButton handlerAddChat={chatStore.addNewChat}/>
         </div>
     );
 });

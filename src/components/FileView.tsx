@@ -4,8 +4,8 @@ import {observer} from "mobx-react";
 
 
 const FileView = observer(() => {
-    const {questionStore} = useStore();
-    const fileStyle = {
+    const {questionStore}: any = useStore();
+    const fileStyle: any = {
         width: '30%',
         height: '800px',
         border: '1px black solid',

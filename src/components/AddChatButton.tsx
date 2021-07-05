@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 
-const style = {
+const style: any = {
     border: '2px grey solid',
     display: 'inline-block',
     height: '50px',
@@ -9,8 +9,8 @@ const style = {
     position: 'absolute',
 };
 
-function AddChatButton(props) {
-    const { handlerAddChat } = props;
+const AddChatButton = (props: any) => {
+    const {handlerAddChat} = props;
     return (
         <button onClick={handlerAddChat} style={style}>
             Добавить чат

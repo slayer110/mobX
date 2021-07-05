@@ -2,25 +2,26 @@ import React from 'react';
 import {useStore} from '../store/use-store';
 import {observer} from 'mobx-react';
 
-const QuestionView = observer(() => {
-    const {questionStore} = useStore();
-    const questionsStyle = {
-        width: '400px',
-        height: '800px',
-        border: '1px black solid',
-        display: 'inline-block',
-        overflowY: 'auto',
-    };
-    const styleButton = {
-        display: 'inline-block'
-    }
-    const titleStyle = {
-        textAlign: 'center',
-    };
+const questionsStyle: any = {
+    width: '400px',
+    height: '800px',
+    border: '1px black solid',
+    display: 'inline-block',
+    overflowY: 'auto',
+};
+const styleButton: any = {
+    display: 'inline-block'
+}
+const titleStyle: any = {
+    textAlign: 'center',
+};
 
-    const styleActiveQuestion={
-        display: 'inline-block'
-    }
+const styleActiveQuestion: any = {
+    display: 'inline-block'
+}
+
+const QuestionView = observer(() => {
+    const {questionStore}: any = useStore();
 
     return (
         <div style={questionsStyle}>

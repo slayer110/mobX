@@ -1,16 +1,16 @@
-import { makeAutoObservable } from 'mobx';
+import {makeAutoObservable} from 'mobx';
 import PubSub from 'pubsub-js';
 
-class ChatStore {
-    data = [];
+export class ChatStore {
+    data: any[] = [];
 
-    active = null;
+    active: number | null = null;
 
     constructor() {
         makeAutoObservable(this);
     }
 
-    changeActiveChat = (chatId) => {
+    changeActiveChat = (chatId: any) => {
         this.active = chatId;
         PubSub.publish('chatActiveId', this.active);
     };
@@ -23,10 +23,8 @@ class ChatStore {
             PubSub.publish('chatActiveId', this.active);
         }
 
-        this.data.push({ chatId, name: `${this.data.length + 1} Чат` });
+        this.data.push({chatId, name: `${this.data.length + 1} Чат`});
 
         PubSub.publish('chatsData', this.data[this.data.length - 1].chatId);
     };
 }
-
-export default ChatStore;
