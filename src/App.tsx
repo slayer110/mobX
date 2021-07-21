@@ -4,7 +4,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 
 // internal
 import PostPresenter from './modules/post/ui/presenter/PostPresenter';
-import AppealsPresenter from './modules/appeals/ui/presenter/AppealsWrapperPresenter';
+import AppealsPresenter from 'modules/postInfo/ui/presenter/PostInfoWrapperPresenter';
 
 const useStyles = makeStyles(() => ({
     postContainer: {
