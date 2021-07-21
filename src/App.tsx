@@ -1,44 +1,42 @@
+// external
 import React from 'react';
-import './App.css';
-import {observer} from 'mobx-react-lite';
-import Organizations from './modules/chat/ui/CorrespondenceAreaView';
-import QuestionView from './components/QuestionView';
-import Chat from './modules/chat/ui/ChatView';
-import AddChatButton from './components/AddChatButton';
-import {useStore} from './store/use-store';
-import FileView from "./components/FileView";
-import CorrespondenceAreaView from "./modules/chat/ui/CorrespondenceAreaView";
+import { Grid, makeStyles } from '@material-ui/core';
 
-const chatsBoxStyle: any = {
-    height: '100%',
-    width: '10%',
-    border: '1px solid black',
-    overflowY: 'auto',
-    display: 'inline-block',
-};
-const containerStyle: any = {width: '100%', height: '98vh', display:'flex'};
+// internal
+import PostPresenter from './modules/post/ui/presenter/PostPresenter';
+import AppealsPresenter from './modules/appeals/ui/presenter/AppealsWrapperPresenter';
 
-const App = observer(() => {
-    const {chatStore}: any = useStore();
+const useStyles = makeStyles(() => ({
+    postContainer: {
+        flexWrap: 'nowrap',
+        height: '98vh',
+        width: '1000px',
+    },
+
+    appealsContainer: { height: '98vh', marginLeft: '10px' },
+}));
+
+const App = () => {
+    const classes = useStyles();
 
     return (
-        <div style={containerStyle}>
-            <div style={chatsBoxStyle}>
-                {chatStore.data.map((elem: any, i: number) => (
-                    <Chat
-                        onClick={chatStore.changeActiveChat}
-                        key={i}
-                        info={elem}
-                        active={chatStore.active}
-                    />
-                ))}
-            </div>
-            <CorrespondenceAreaView/>
-            {/*<QuestionView/>*/}
-            {/*<FileView/>*/}
-            <AddChatButton handlerAddChat={chatStore.addNewChat}/>
-        </div>
+        <Grid container>
+            <Grid container item className={classes.postContainer}>
+                <PostPresenter />
+            </Grid>
+            <Grid
+                container
+                direction="column"
+                item
+                lg
+                className={classes.appealsContainer}
+                alignItems="center"
+                justifyContent="space-between"
+            >
+                <AppealsPresenter />
+            </Grid>
+        </Grid>
     );
-});
+};
 
 export default App;

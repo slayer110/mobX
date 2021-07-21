@@ -6,5 +6,4 @@ const errorStyle = {
 };
 const ErrorComponent = () => <div style={errorStyle}>Ошибка загрузки</div>;
 
-
 export default ErrorComponent;
