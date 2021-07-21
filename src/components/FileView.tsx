@@ -4,7 +4,7 @@ import {observer} from "mobx-react";
 
 
 const FileView = observer(() => {
-    const {questionStore}: any = useStore();
+    const {appealStore}: any = useStore();
     const fileStyle: any = {
         width: '30%',
         height: '800px',
@@ -16,7 +16,7 @@ const FileView = observer(() => {
     return (
         <div style={fileStyle}>
             <h1>Файлы</h1>
-            {questionStore.activeQuestion?.data.file?.name}
+            {appealStore.activeAppeal?.data.file?.name}
         </div>
     );
 })

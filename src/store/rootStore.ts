@@ -1,13 +1,11 @@
-import { ChatStore } from '../modules/chat/store/chatStore';
-import OrganizationsStore from './organizationsStore';
-import QuestionStore from './questionStore';
-import FileStore from './fileStore';
+import { PostStore } from '../modules/post/store/PostStore';
+import MessagesStore from '../modules/post/store/MessagesStore';
+import { AppealsStore } from '../modules/appeals/store/AppealsStore';
 
-class RootStore {
-    chatStore = new ChatStore();
-    fileStore = new FileStore();
-    questionStore = new QuestionStore(this.fileStore);
-    organizationsStore = new OrganizationsStore();
+export class RootStore {
+    public postStore = new PostStore();
+
+    public messagesStore = new MessagesStore();
+
+    public appealsStore = new AppealsStore();
 }
-
-export default RootStore;

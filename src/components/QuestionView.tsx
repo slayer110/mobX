@@ -2,7 +2,7 @@ import React from 'react';
 import {useStore} from '../store/use-store';
 import {observer} from 'mobx-react';
 
-const questionsStyle: any = {
+const appealsStyle: any = {
     width: '400px',
     height: '800px',
     border: '1px black solid',
@@ -16,23 +16,23 @@ const titleStyle: any = {
     textAlign: 'center',
 };
 
-const styleActiveQuestion: any = {
+const styleActiveAppeal: any = {
     display: 'inline-block'
 }
 
-const QuestionView = observer(() => {
-    const {questionStore}: any = useStore();
+const AppealView = observer(() => {
+    const {appealStore}: any = useStore();
 
     return (
-        <div style={questionsStyle}>
+        <div style={appealsStyle}>
             <div style={titleStyle}>
                 <h1>Вопросы</h1>
             </div>
-            {questionStore.activeQuestion?.data.name && <>
-                <div style={styleActiveQuestion}>{questionStore.activeQuestion?.data.name}</div>
-                <button onClick={questionStore.getFile} style={styleButton}>Загрузить</button>
+            {appealStore.activeAppeal?.data.name && <>
+                <div style={styleActiveAppeal}>{appealStore.activeAppeal?.data.name}</div>
+                <button onClick={appealStore.getFile} style={styleButton}>Загрузить</button>
             </>}
         </div>
     );
 });
-export default QuestionView;
+export default AppealView;

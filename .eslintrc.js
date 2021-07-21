@@ -1,6 +1,11 @@
 module.exports = {
     parser: '@typescript-eslint/parser',
-    extends: ['airbnb', 'plugin:@typescript-eslint/recommended', 'plugin:react/recommended', 'prettier'],
+    extends: [
+        'airbnb',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:react/recommended',
+        'prettier',
+    ],
     plugins: ['react-hooks'],
     parserOptions: {
         ecmaVersion: 2018,
@@ -10,7 +15,7 @@ module.exports = {
         },
     },
     rules: {
-        'quotes': ['error', 'single'],
+        quotes: ['error', 'single'],
         'no-unused-labels': ['error'],
         'no-unused-vars': ['error'],
         'consistent-return': ['error'],
@@ -21,7 +26,20 @@ module.exports = {
         'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
         '@typescript-eslint/ban-ts-ignore': 0, // TODO убрать правило
         '@typescript-eslint/no-inferrable-types': 0, // because this rule conflicts with typedef rule
-        '@typescript-eslint/interface-name-prefix': [2, 'always'],
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': ['error'],
+        '@typescript-eslint/naming-convention': [
+            'error',
+            {
+                selector: 'interface',
+                format: ['PascalCase'],
+                custom: {
+                    regex: '^I[A-Z]',
+                    match: true,
+                },
+            },
+        ],
+
         'import/prefer-default-export': 0,
         'import/extensions': 0,
         eqeqeq: ['error', 'always'],
@@ -32,6 +50,7 @@ module.exports = {
         'react/jsx-indent': [2, 4],
         'react/jsx-indent-props': [2, 4],
         'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
+        'react/jsx-props-no-spreading': 'off',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
         'react/jsx-wrap-multilines': 1,
@@ -41,7 +60,11 @@ module.exports = {
             'error',
             { blankLine: 'always', prev: ['const', 'let'], next: '*' },
             { blankLine: 'always', prev: '*', next: ['const', 'let'] },
-            { blankLine: 'any', prev: ['const', 'let'], next: ['const', 'let'] },
+            {
+                blankLine: 'any',
+                prev: ['const', 'let'],
+                next: ['const', 'let'],
+            },
             { blankLine: 'always', prev: 'directive', next: '*' },
             { blankLine: 'any', prev: 'directive', next: 'directive' },
             { blankLine: 'always', prev: '*', next: 'return' },
