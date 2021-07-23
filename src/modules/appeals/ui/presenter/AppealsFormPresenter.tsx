@@ -52,28 +52,28 @@ const AppealsFormPresenter = observer(() => {
         watch,
         formState: { errors },
         setValue,
-        clearErrors,
     } = useForm<IAppeal>({
         mode: 'onBlur',
         resolver: yupResolver(schema),
         defaultValues,
     });
-    const data = watch();
     const classes = useStyles();
     const isShowComment = watch('appealsType') === 'closedFirstLine';
     const isShowCompetence = watch('appealsType') === 'expertise';
     const isShowUrgent = watch('appealsType') === 'complaint';
 
+    const handleChangeField = (field: any) => {
+        const { name, value } = field;
+
+        appealsStore.saveAppeal({ [name]: value });
+    };
+
     React.useEffect(() => {
-        clearErrors();
         setValue('appealsType', appealsStore.activeAppeal.appealsType);
         setValue('comment', appealsStore.activeAppeal.comment);
         setValue('competencesType', appealsStore.activeAppeal.competencesType);
         setValue('urgent', appealsStore.activeAppeal.urgent);
     }, [appealsStore.activeAppealIndex, appealsStore.activePost, appealsStore.activeAppeal]);
-    React.useEffect(() => {
-        appealsStore.saveAppeal(data);
-    }, [data]);
 
     return (
         <form className={classes.wrapper}>
@@ -83,7 +83,14 @@ const AppealsFormPresenter = observer(() => {
                     name="appealsType"
                     control={control}
                     render={({ field }) => (
-                        <Select {...field} fullWidth>
+                        <Select
+                            {...field}
+                            fullWidth
+                            onChange={(e) => {
+                                handleChangeField({ name: 'appealsType', value: e.target.value });
+                                field.onChange(e);
+                            }}
+                        >
                             <MenuItem value="closedFirstLine">Закрыто 1-ая линия</MenuItem>
                             <MenuItem value="complaint">Жалоба/претензия</MenuItem>
                             <MenuItem value="expertise">Экспертиза</MenuItem>
@@ -105,6 +112,10 @@ const AppealsFormPresenter = observer(() => {
                                 label="Комментарий"
                                 placeholder="Введите комментарий"
                                 fullWidth
+                                onChange={(e) => {
+                                    handleChangeField({ name: 'comment', value: e.target.value });
+                                    field.onChange(e);
+                                }}
                             />
                         )}
                     />
@@ -118,7 +129,14 @@ const AppealsFormPresenter = observer(() => {
                         name="competencesType"
                         control={control}
                         render={({ field }) => (
-                            <Select {...field} fullWidth>
+                            <Select
+                                {...field}
+                                fullWidth
+                                onChange={(e) => {
+                                    handleChangeField({ name: 'competencesType', value: e.target.value });
+                                    field.onChange(e);
+                                }}
+                            >
                                 <MenuItem value="first">Первая компетенция</MenuItem>
                                 <MenuItem value="second">Вторая компетенция</MenuItem>
                                 <MenuItem value="third">Третья компетенция</MenuItem>
@@ -135,7 +153,16 @@ const AppealsFormPresenter = observer(() => {
                         render={({ field }) => (
                             <FormControlLabel
                                 label="Важность вопроса"
-                                control={<Checkbox {...field} checked={field.value} />}
+                                control={
+                                    <Checkbox
+                                        {...field}
+                                        checked={field.value}
+                                        onChange={(e) => {
+                                            handleChangeField({ name: 'urgent', value: e.target.value });
+                                            field.onChange(e);
+                                        }}
+                                    />
+                                }
                             />
                         )}
                     />
