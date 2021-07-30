@@ -20,7 +20,10 @@ const AppealsWrapperPresenter = observer(() => {
     return (
         <>
             <Grid item container direction="column" justifyContent="space-between" className={classes.appealsWrapper}>
-                {appealsStore.activePostAppeals.length > 0 && <AppealsPresenter />}
+                <Grid item>{appealsStore.activePostAppeals.length > 0 && <AppealsPresenter />}</Grid>
+                <Grid item>
+                    <button onClick={() => appealsStore.validateData()}>Проверка</button>
+                </Grid>
             </Grid>
         </>
     );

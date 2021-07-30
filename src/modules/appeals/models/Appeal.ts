@@ -8,18 +8,18 @@ export class Appeal {
 
     public comment = '';
 
-    public appealsType = '';
+    public appealType = '';
 
-    public competencesType = '';
+    public competenceType = '';
 
     public urgent = false;
-
-    public saveAppealFields(data: IAppeal): void {
-        const { comment, appealsType, competencesType, urgent } = data;
-
-        this.comment = comment;
-        this.appealsType = appealsType;
-        this.competencesType = competencesType;
-        this.urgent = urgent;
-    }
+    //
+    // public saveAppealFields(data: IAppeal): void {
+    //     const { comment, appealsType, competencesType, urgent } = data;
+    //
+    //     this.comment = comment;
+    //     this.appealsType = appealsType;
+    //     this.competencesType = competencesType;
+    //     this.urgent = urgent;
+    // }
 }

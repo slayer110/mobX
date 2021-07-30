@@ -4,7 +4,7 @@ import { Tabs, Tab, Button, Grid, makeStyles } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 
 // internal
-import AppealsFormPresenter from './AppealsFormPresenter';
+import { AppealForm } from '../view/AppealForm';
 import { useStore } from '../../../../store/use-store';
 import { Appeal } from '../../models/Appeal';
 
@@ -23,13 +23,17 @@ const AppealsPresenter = observer(() => {
         appealsStore.changeActiveAppeal(appealsStore.activePostAppeals.length - 1);
     };
 
+    const handleSaveAppeal = (data: any) => {
+        appealsStore.saveAppeal(data);
+    };
+
     return (
         <>
             <Grid item container direction="column">
                 <Grid item>
                     <Tabs
                         value={appealsStore.activeAppealIndex}
-                        onChange={(_e: React.ChangeEvent<unknown>, value: string) =>
+                        onChange={(_e: React.ChangeEvent<unknown>, value: number) =>
                             appealsStore.changeActiveAppeal(value)
                         }
                     >
@@ -39,7 +43,21 @@ const AppealsPresenter = observer(() => {
                     </Tabs>
                 </Grid>
                 <Grid item>
-                    <AppealsFormPresenter />
+                    {appealsStore.activePostAppeals.map((appeal: Appeal, index: number) => (
+                        <AppealForm
+                            key={appeal.id}
+                            isVisible={appealsStore.activeAppealIndex === index}
+                            activeAppeal={appeal}
+                            onSaveAppeal={handleSaveAppeal}
+                        />
+                    ))}
+                    {/* {appealsStore.activeAppeal.id && ( */}
+                    {/*     <AppealForm */}
+                    {/*        appealId={appealsStore.activeAppeal.id} */}
+                    {/*        activeAppeal={appealsStore.activeAppeal} */}
+                    {/*        onSaveAppeal={handleSaveAppeal} */}
+                    {/*    /> */}
+                    {/* )} */}
                 </Grid>
             </Grid>
             <Grid item className={classes.addAppealButton}>

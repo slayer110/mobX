@@ -22,6 +22,10 @@ module.exports = {
         'no-fallthrough': ['error'],
         'import/order': 0,
         '@typescript-eslint/explicit-member-accessibility': ['error'],
+        'import/no-extraneous-dependencies': [
+            'error',
+            { devDependencies: true },
+        ],
         '@typescript-eslint/member-ordering': ['error'],
         'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
         '@typescript-eslint/ban-ts-ignore': 0, // TODO убрать правило
