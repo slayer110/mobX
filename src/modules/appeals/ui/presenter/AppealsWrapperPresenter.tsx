@@ -1,6 +1,6 @@
 // external
-import * as React from 'react';
-import { Grid, makeStyles } from '@material-ui/core';
+import React, { useCallback } from 'react';
+import { Grid, makeStyles, Button } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 
 // internal
@@ -14,15 +14,21 @@ const useStyles = makeStyles(() => ({
 }));
 
 const AppealsWrapperPresenter = observer(() => {
-    const { appealsStore } = useStore();
+    const { appealsStore, saveFormStore } = useStore();
     const classes = useStyles();
+
+    const handleSaveForm = useCallback(() => {
+        saveFormStore.saveAll();
+    }, [saveFormStore]);
 
     return (
         <>
             <Grid item container direction="column" justifyContent="space-between" className={classes.appealsWrapper}>
-                <Grid item>{appealsStore.activePostAppeals.length > 0 && <AppealsPresenter />}</Grid>
+                <Grid item>{appealsStore.activeAppealsByPost.length > 0 && <AppealsPresenter />}</Grid>
                 <Grid item>
-                    <button onClick={() => appealsStore.validateData()}>Проверка</button>
+                    <Button color="primary" onClick={handleSaveForm}>
+                        Сохранить
+                    </Button>
                 </Grid>
             </Grid>
         </>

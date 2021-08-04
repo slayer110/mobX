@@ -1,17 +1,15 @@
-// internal
-import { EventBus } from '../../../common/eventBus/eventBus';
-import { validateForm } from '../../../utils/validation/validate';
-import { validationSchemes } from '../../../utils/validation/schemes';
-
 // external
 import { makeAutoObservable } from 'mobx';
+import { v4 as uuidv4 } from 'uuid';
+
+// internal
+import { EventBus } from 'common/eventBus/eventBus';
 
 // interfaces
-import { IAppeals, IAppeal, IActiveAppeals } from '../interfaces';
+import { IAppeals, IAppeal, IActiveAppeals } from 'interfaces';
 
 // constants
-import { event } from '../../../common/eventBus/event';
-import { v4 as uuidv4 } from 'uuid';
+import { event } from 'common/eventBus/event';
 
 const appeal = {
     id: uuidv4(),
@@ -40,7 +38,7 @@ export class AppealsStore {
     }
 
     public saveAppeal(data: IAppeal): void {
-        this.activePostAppeals[this.activeAppealIndex] = { ...this.activeAppeal, ...data };
+        this.activeAppealsByPost[this.activeAppealIndex] = { ...this.activeAppeal, ...data };
     }
 
     public saveActivePost(postId: string): void {
@@ -60,30 +58,19 @@ export class AppealsStore {
         this.activeAppeals[postId] = initialActiveIndex;
     }
 
-    public async validateData(): Promise<void> {
-        let validationErrorIndex = 0;
-
-        try {
-            await Promise.all(this.activePostAppeals.map((item: IAppeal) => validateForm(validationSchemes.appeal, item)));
-        } catch (e) {
-            validationErrorIndex = this.activePostAppeals.findIndex((item) => item.id === e.value.id);
-            this.changeActiveAppeal(validationErrorIndex);
-        }
-    }
-
     public addAppeal(): void {
-        this.activePostAppeals.push({ ...appeal, id: uuidv4() });
+        this.activeAppealsByPost.push({ ...appeal, id: uuidv4() });
     }
 
     public get activeAppeal(): IAppeal {
-        return this.activePostAppeals[this.activeAppealIndex] || appeal;
+        return this.activeAppealsByPost[this.activeAppealIndex] || appeal;
     }
 
     public get activeAppealIndex(): number {
         return this.activeAppeals[this.activePost] || 0;
     }
 
-    public get activePostAppeals(): IAppeal[] {
+    public get activeAppealsByPost(): IAppeal[] {
         return this.appeals[this.activePost] || [];
     }
 }

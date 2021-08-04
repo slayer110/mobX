@@ -5,8 +5,8 @@ import { observer } from 'mobx-react-lite';
 
 // internal
 import { AppealForm } from '../view/AppealForm';
-import { useStore } from '../../../../store/use-store';
-import { Appeal } from '../../models/Appeal';
+import { useStore } from 'store/use-store';
+import { Appeal } from 'modules/appeals/models/Appeal';
 
 const useStyles = makeStyles(() => ({
     addAppealButton: {
@@ -20,7 +20,7 @@ const AppealsPresenter = observer(() => {
 
     const handleAddAppeal = () => {
         appealsStore.addAppeal();
-        appealsStore.changeActiveAppeal(appealsStore.activePostAppeals.length - 1);
+        appealsStore.changeActiveAppeal(appealsStore.activeAppealsByPost.length - 1);
     };
 
     const handleSaveAppeal = (data: any) => {
@@ -37,13 +37,13 @@ const AppealsPresenter = observer(() => {
                             appealsStore.changeActiveAppeal(value)
                         }
                     >
-                        {appealsStore.activePostAppeals.map((appeal: Appeal, index: number) => (
+                        {appealsStore.activeAppealsByPost.map((appeal: Appeal, index: number) => (
                             <Tab key={appeal.id} label={`${index + 1}-вопрос`} />
                         ))}
                     </Tabs>
                 </Grid>
                 <Grid item>
-                    {appealsStore.activePostAppeals.map((appeal: Appeal, index: number) => (
+                    {appealsStore.activeAppealsByPost.map((appeal: Appeal, index: number) => (
                         <AppealForm
                             key={appeal.id}
                             isVisible={appealsStore.activeAppealIndex === index}

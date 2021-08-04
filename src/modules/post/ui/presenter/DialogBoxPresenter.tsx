@@ -36,6 +36,9 @@ const DialogBoxPresenter = observer(() => {
         <>
             <Grid item className={title}>
                 <h1>Окно диалога</h1>
+                <Grid item className={sendingMessageField}>
+                    <AddPostButton handlerAddPost={postStore.addNewPost} />
+                </Grid>
             </Grid>
             <Grid item>
                 <DialogBoxArea
@@ -47,9 +50,6 @@ const DialogBoxPresenter = observer(() => {
                 >
                     {Row}
                 </DialogBoxArea>
-            </Grid>
-            <Grid item className={sendingMessageField}>
-                <AddPostButton handlerAddPost={postStore.addNewPost} />
             </Grid>
         </>
     );

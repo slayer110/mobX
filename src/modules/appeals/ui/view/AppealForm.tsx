@@ -4,10 +4,11 @@ import { Form } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { MenuItem, FormControl, InputLabel, makeStyles } from '@material-ui/core';
 import { Select, TextField, Checkboxes, CheckboxData } from 'mui-rff';
+import createDecorator from 'final-form-focus';
 
 // internal
-import { validateFormValues } from '../../../../utils/validation/validate';
-import { validationSchemes } from '../../../../utils/validation/schemes';
+import { validateFormValues } from 'modules/appeals/validators/validators';
+import { schemes } from '../../validators/schemes';
 
 // interfaces
 import { IAppeal } from '../../interfaces';
@@ -37,6 +38,8 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+const focusOnErrors = createDecorator();
+
 export const AppealForm = React.memo((props: IProps) => {
     const { activeAppeal, onSaveAppeal, isVisible } = props;
     const classes = useStyles();
@@ -52,15 +55,12 @@ export const AppealForm = React.memo((props: IProps) => {
 
     return (
         <Form
-            subscription={{ submitSucceeded: false, error: true }}
-            onSubmit={(values: IFormValues) => {
-                console.log(values);
-            }}
-            validateOnBlur={false}
-            initialValues={{}}
-            validate={validateFormValues(validationSchemes.appeal)}
+            subscription={{ submitSucceeded: true }}
+            onSubmit={null}
+            validate={validateFormValues(schemes.appeal)}
+            decorators={[focusOnErrors]}
         >
-            {({ handleSubmit, form: { submit } }) => (
+            {({ handleSubmit }) => (
                 <form
                     ref={formRef}
                     style={{ display: isVisible ? 'block' : 'none' }}
@@ -82,14 +82,11 @@ export const AppealForm = React.memo((props: IProps) => {
                     </FormControl>
                     {/* TODO Чтобы валидация действовала только для видимых полей. Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться */}
 
-                    {/*{activeAppeal.appealType === 'closedFirstLine' && (*/}
+                    {/* {activeAppeal.appealType === 'closedFirstLine' && ( */}
                     <>
                         <InputLabel>Комментарий</InputLabel>
                         <FormControl className={classes.field}>
-                            <TextField
-                                name="comment"
-                                value={activeAppeal.comment}
-                            />
+                            <TextField name="comment" value={activeAppeal.comment} />
                             <OnChange name="comment">
                                 {(value: any, previous: any) => {
                                     handleChangeField({ name: 'comment', value, previous });
@@ -97,7 +94,7 @@ export const AppealForm = React.memo((props: IProps) => {
                             </OnChange>
                         </FormControl>
                     </>
-                    {/*)}*/}
+                    {/* )} */}
                     {activeAppeal.appealType === 'expertise' && (
                         <Select fullWidth name="competenceType">
                             <MenuItem value="first">Первая компетенция</MenuItem>
@@ -117,7 +114,6 @@ export const AppealForm = React.memo((props: IProps) => {
                             </OnChange>
                         </FormControl>
                     )}
-                    <button type="submit">Submit</button>
                 </form>
             )}
         </Form>
