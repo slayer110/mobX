@@ -35,7 +35,7 @@ const DialogBoxPresenter = observer(() => {
     return (
         <>
             <Grid item className={title}>
-                <h1>Окно диалога</h1>
+                <h1>Список постов</h1>
                 <Grid item className={sendingMessageField}>
                     <AddPostButton handlerAddPost={postStore.addNewPost} />
                 </Grid>
@@ -43,9 +43,9 @@ const DialogBoxPresenter = observer(() => {
             <Grid item>
                 <DialogBoxArea
                     className={dialogBox}
-                    height={700}
+                    height={400}
                     itemCount={messagesStore.activePostMessages.list.length}
-                    itemSize={50}
+                    itemSize={10}
                     width="100%"
                 >
                     {Row}

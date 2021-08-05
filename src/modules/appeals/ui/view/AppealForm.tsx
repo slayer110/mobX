@@ -32,7 +32,8 @@ const useStyles = makeStyles(() => ({
         display: 'none',
     },
     field: {
-        minWidth: '100%',
+        width: '100%',
+        marginBottom: '30px',
     },
     wrapper: {
         marginTop: '30px',
@@ -66,21 +67,12 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
         >
             {({ handleSubmit }) => (
                 <form className={isVisible ? classes.wrapper : classes.hidden} onSubmit={handleSubmit}>
-                    <InputLabel>Комментарий</InputLabel>
-                    <FormControl className={classes.field}>
-                        <TextField name="comment" value={comment} />
-                        <OnChange name="comment">
-                            {(value: any) => {
-                                handleChangeField({ name: 'comment', value });
-                            }}
-                        </OnChange>
-                    </FormControl>
                     <InputLabel>Статус</InputLabel>
                     <FormControl className={classes.field}>
                         <Select required fullWidth name="appealType" value={appealType}>
-                            <MenuItem value="closedFirstLine">Закрыто 1-ая линия</MenuItem>
-                            <MenuItem value="complaint">Жалоба/претензия</MenuItem>
-                            <MenuItem value="expertise">Экспертиза</MenuItem>
+                            <MenuItem value="closedFirstLine">Закрыто</MenuItem>
+                            <MenuItem value="complaint">Открыто</MenuItem>
+                            <MenuItem value="expertise">Прикройте</MenuItem>
                         </Select>
                         <OnChange name="appealType">
                             {(value: any) => {
@@ -88,6 +80,16 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                             }}
                         </OnChange>
                     </FormControl>
+                    <InputLabel>Комментарий</InputLabel>
+                    <FormControl className={classes.field}>
+                        <TextField name="comment" multiline rows={7} value={comment} />
+                        <OnChange name="comment">
+                            {(value: any) => {
+                                handleChangeField({ name: 'comment', value });
+                            }}
+                        </OnChange>
+                    </FormControl>
+
                     {/* {activeAppeal.appealType === 'expertise' && (
                         <Select fullWidth name="competenceType">
                             <MenuItem value="first">Первая компетенция</MenuItem>
