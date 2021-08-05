@@ -28,7 +28,7 @@ export class AppealsStore {
 
     public constructor() {
         makeAutoObservable(this);
-        // TODO То, что приходится сохранять одно и то же во многих модулях
+        // TODO приходится сохранять одно и то же во многих модулях
         EventBus.subscribe(event.post.changeActiveId, (postId: string) => {
             this.saveActivePost(postId);
         });
@@ -38,7 +38,9 @@ export class AppealsStore {
     }
 
     public saveAppeal(data: IAppeal): void {
-        this.activeAppealsByPost[this.activeAppealIndex] = { ...this.activeAppeal, ...data };
+        const obj = this.activeAppealsByPost[this.activeAppealIndex];
+
+        Object.assign(obj, this.activeAppeal, data);
     }
 
     public saveActivePost(postId: string): void {
@@ -53,7 +55,6 @@ export class AppealsStore {
         const initialActiveIndex = 0;
 
         this.appeals[postId] = [];
-        // @ts-ignore
         this.appeals[postId][initialActiveIndex] = appeal;
         this.activeAppeals[postId] = initialActiveIndex;
     }

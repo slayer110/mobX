@@ -7,6 +7,9 @@ import { observer } from 'mobx-react-lite';
 import { AppealForm } from '../view/AppealForm';
 import { useStore } from 'store/use-store';
 import { Appeal } from 'modules/appeals/models/Appeal';
+import { AppealsTab } from 'modules/appeals/ui/presenter/AppealsTab';
+import { AppealsList } from 'modules/appeals/ui/presenter/AppealsList';
+import { AppealsTabsList } from 'modules/appeals/ui/presenter/AppealsTabsList';
 
 const useStyles = makeStyles(() => ({
     addAppealButton: {
@@ -14,7 +17,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const AppealsPresenter = observer(() => {
+export const AppealsPresenter = observer(() => {
     const { appealsStore } = useStore();
     const classes = useStyles();
 
@@ -27,38 +30,33 @@ const AppealsPresenter = observer(() => {
         appealsStore.saveAppeal(data);
     };
 
+    const handleChangeAppeal = (index: number) => {
+        appealsStore.changeActiveAppeal(index);
+    };
+
     return (
         <>
             <Grid item container direction="column">
-                <Grid item>
-                    <Tabs
-                        value={appealsStore.activeAppealIndex}
-                        onChange={(_e: React.ChangeEvent<unknown>, value: number) =>
-                            appealsStore.changeActiveAppeal(value)
-                        }
-                    >
-                        {appealsStore.activeAppealsByPost.map((appeal: Appeal, index: number) => (
-                            <Tab key={appeal.id} label={`${index + 1}-вопрос`} />
-                        ))}
-                    </Tabs>
+                {/*<Grid item>
+                    <AppealsTab
+                        appeals={appealsStore.activeAppealsByPost}
+                        activeIndex={appealsStore.activeAppealIndex}
+                        changeActiveAppeal={handleChangeAppeal}
+                    />
                 </Grid>
                 <Grid item>
-                    {appealsStore.activeAppealsByPost.map((appeal: Appeal, index: number) => (
-                        <AppealForm
-                            key={appeal.id}
-                            isVisible={appealsStore.activeAppealIndex === index}
-                            activeAppeal={appeal}
-                            onSaveAppeal={handleSaveAppeal}
-                        />
-                    ))}
-                    {/* {appealsStore.activeAppeal.id && ( */}
-                    {/*     <AppealForm */}
-                    {/*        appealId={appealsStore.activeAppeal.id} */}
-                    {/*        activeAppeal={appealsStore.activeAppeal} */}
-                    {/*        onSaveAppeal={handleSaveAppeal} */}
-                    {/*    /> */}
-                    {/* )} */}
-                </Grid>
+                    <AppealsList
+                        activeIndex={appealsStore.activeAppealIndex}
+                        appeals={appealsStore.activeAppealsByPost}
+                        onSaveAppeal={handleSaveAppeal}
+                    />
+                </Grid>*/}
+                <AppealsTabsList
+                    onSaveAppeal={handleSaveAppeal}
+                    changeActiveAppeal={handleChangeAppeal}
+                    appeals={appealsStore.activeAppealsByPost}
+                    activeIndex={appealsStore.activeAppealIndex}
+                />
             </Grid>
             <Grid item className={classes.addAppealButton}>
                 <Button onClick={handleAddAppeal}>Добавить вопрос</Button>
@@ -66,5 +64,3 @@ const AppealsPresenter = observer(() => {
         </>
     );
 });
-
-export default React.memo(AppealsPresenter);

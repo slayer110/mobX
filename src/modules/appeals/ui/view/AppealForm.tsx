@@ -1,5 +1,6 @@
 // external
 import * as React from 'react';
+import { observer } from 'mobx-react-lite';
 import { Form } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { MenuItem, FormControl, InputLabel, makeStyles } from '@material-ui/core';
@@ -27,6 +28,9 @@ interface IFormValues {
 }
 
 const useStyles = makeStyles(() => ({
+    hidden: {
+        display: 'none',
+    },
     field: {
         minWidth: '100%',
     },
@@ -40,12 +44,12 @@ const useStyles = makeStyles(() => ({
 
 const focusOnErrors = createDecorator();
 
-export const AppealForm = React.memo((props: IProps) => {
-    const { activeAppeal, onSaveAppeal, isVisible } = props;
+// TODO Чтобы валидация действовала только для видимых полей.
+//  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
+export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible }) => {
+    const { comment, appealType } = activeAppeal;
     const classes = useStyles();
-    const formRef = React.useRef(null);
-
-    const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];
+    // const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];
 
     const handleChangeField = (field: any) => {
         const { name, value } = field;
@@ -55,21 +59,25 @@ export const AppealForm = React.memo((props: IProps) => {
 
     return (
         <Form
-            subscription={{ submitSucceeded: true }}
-            onSubmit={null}
-            validate={validateFormValues(schemes.appeal)}
-            decorators={[focusOnErrors]}
+            subscription={{ pristine: true }}
+            onSubmit={() => {}}
+            // validate={validateFormValues(schemes.appeal)}
+            // decorators={[focusOnErrors]}
         >
             {({ handleSubmit }) => (
-                <form
-                    ref={formRef}
-                    style={{ display: isVisible ? 'block' : 'none' }}
-                    onSubmit={handleSubmit}
-                    className={classes.wrapper}
-                >
+                <form className={isVisible ? classes.wrapper : classes.hidden} onSubmit={handleSubmit}>
+                    <InputLabel>Комментарий</InputLabel>
+                    <FormControl className={classes.field}>
+                        <TextField name="comment" value={comment} />
+                        <OnChange name="comment">
+                            {(value: any) => {
+                                handleChangeField({ name: 'comment', value });
+                            }}
+                        </OnChange>
+                    </FormControl>
                     <InputLabel>Статус</InputLabel>
                     <FormControl className={classes.field}>
-                        <Select required fullWidth name="appealType" value={activeAppeal.appealType}>
+                        <Select required fullWidth name="appealType" value={appealType}>
                             <MenuItem value="closedFirstLine">Закрыто 1-ая линия</MenuItem>
                             <MenuItem value="complaint">Жалоба/претензия</MenuItem>
                             <MenuItem value="expertise">Экспертиза</MenuItem>
@@ -80,22 +88,7 @@ export const AppealForm = React.memo((props: IProps) => {
                             }}
                         </OnChange>
                     </FormControl>
-                    {/* TODO Чтобы валидация действовала только для видимых полей. Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться */}
-
-                    {/* {activeAppeal.appealType === 'closedFirstLine' && ( */}
-                    <>
-                        <InputLabel>Комментарий</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextField name="comment" value={activeAppeal.comment} />
-                            <OnChange name="comment">
-                                {(value: any, previous: any) => {
-                                    handleChangeField({ name: 'comment', value, previous });
-                                }}
-                            </OnChange>
-                        </FormControl>
-                    </>
-                    {/* )} */}
-                    {activeAppeal.appealType === 'expertise' && (
+                    {/* {activeAppeal.appealType === 'expertise' && (
                         <Select fullWidth name="competenceType">
                             <MenuItem value="first">Первая компетенция</MenuItem>
                             <MenuItem value="second">Вторая компетенция</MenuItem>
@@ -106,14 +99,12 @@ export const AppealForm = React.memo((props: IProps) => {
                         <FormControl className={classes.field}>
                             <Checkboxes data={checkboxData} name="urgent" />
                             <OnChange name="urgent">
-                                {(value: any, previous: any) => {
-                                    const valueFromCheckboxList = !!value[0];
-
-                                    handleChangeField({ name: 'urgent', valueFromCheckboxList, previous });
+                                {(value: any) => {
+                                    handleChangeField({ name: 'urgent', value: !!value[0] });
                                 }}
                             </OnChange>
                         </FormControl>
-                    )}
+                    )} */}
                 </form>
             )}
         </Form>

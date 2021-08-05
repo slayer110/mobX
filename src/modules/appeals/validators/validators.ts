@@ -11,7 +11,15 @@ export const validateFormValues = (schema: any) => async (values: unknown) => {
     }
 
     try {
-        await formSchema.validate(values, { abortEarly: false });
+        await formSchema.validate(values, {
+            context: {
+                objTest: {
+                    comment: 'objTestaaaaaaaasdasd',
+                    phoneNumber: '6213489898234',
+                },
+            },
+            abortEarly: false,
+        });
     } catch (error) {
         return error.inner.reduce(
             (formError: any, innerError: any) => setIn(formError, innerError.path, innerError.message),

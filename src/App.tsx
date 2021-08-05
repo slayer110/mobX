@@ -3,8 +3,8 @@ import React from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 
 // internal
-import PostPresenter from './modules/post/ui/presenter/PostPresenter';
-import AppealsPresenter from './modules/appeals/ui/presenter/AppealsWrapperPresenter';
+import { PostPresenter } from './modules/post/ui/presenter/PostPresenter';
+import { AppealsWrapperPresenter } from './modules/appeals/ui/presenter/AppealsWrapperPresenter';
 
 const useStyles = makeStyles(() => ({
     postContainer: {
@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
     appealsContainer: { height: '98vh', marginLeft: '10px' },
 }));
 
-const App = () => {
+export const App = () => {
     const classes = useStyles();
 
     return (
@@ -33,10 +33,8 @@ const App = () => {
                 alignItems="center"
                 justifyContent="space-between"
             >
-                <AppealsPresenter />
+                <AppealsWrapperPresenter />
             </Grid>
         </Grid>
     );
 };
-
-export default App;

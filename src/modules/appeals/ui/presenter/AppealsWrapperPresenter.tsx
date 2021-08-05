@@ -4,8 +4,8 @@ import { Grid, makeStyles, Button } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 
 // internal
-import { useStore } from '../../../../store/use-store';
-import AppealsPresenter from './AppealsPresenter';
+import { useStore } from 'store/use-store';
+import { AppealsPresenter } from './AppealsPresenter';
 
 const useStyles = makeStyles(() => ({
     appealsWrapper: {
@@ -13,8 +13,8 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const AppealsWrapperPresenter = observer(() => {
-    const { appealsStore, saveFormStore } = useStore();
+export const AppealsWrapperPresenter = observer(() => {
+    const { saveFormStore, appealsStore } = useStore();
     const classes = useStyles();
 
     const handleSaveForm = useCallback(() => {
@@ -34,5 +34,3 @@ const AppealsWrapperPresenter = observer(() => {
         </>
     );
 });
-
-export default React.memo(AppealsWrapperPresenter);

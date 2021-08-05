@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PostPresenter = observer(() => {
+export const PostPresenter = observer(() => {
     const { postStore } = useStore();
     const classes = useStyles();
     const { PostTabsWrapper, dialogBoxWrapper } = classes;
@@ -35,10 +35,9 @@ const PostPresenter = observer(() => {
         <>
             <Grid container item alignContent="flex-start" className={PostTabsWrapper}>
                 {postStore.posts.map((info: Post) => (
-                    <Grid item lg={12}>
+                    <Grid key={info.getId} item lg={12}>
                         <PostTabView
                             onChangePost={postStore.changeActivePost}
-                            key={info.getId}
                             info={info}
                             activeId={postStore.active}
                         />
@@ -52,5 +51,3 @@ const PostPresenter = observer(() => {
         </>
     );
 });
-
-export default React.memo(PostPresenter);
