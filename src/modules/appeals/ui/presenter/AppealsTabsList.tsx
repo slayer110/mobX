@@ -28,7 +28,7 @@ export const AppealsTabsList = observer<IOwnProps>(({ appeals, activeIndex, onSa
                     ))}
                 </Tabs>
             </Grid>
-            <Grid item>
+            <Grid item lg={2}>
                 {appeals.map((appeal: Appeal, index: number) => (
                     <AppealForm
                         key={appeal.id}

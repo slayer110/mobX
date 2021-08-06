@@ -40,6 +40,8 @@ export class AppealsStore {
     public saveAppeal(data: IAppeal): void {
         const obj = this.activeAppealsByPost[this.activeAppealIndex];
 
+        console.warn('saveAppeal data => ', data);
+
         Object.assign(obj, this.activeAppeal, data);
     }
 
