@@ -19,3 +19,6 @@ export class RootStore {
         this.saveFormStore = new SaveFormStore(this.appealsStore);
     }
 }
+
+
+export const rootStore = new RootStore();

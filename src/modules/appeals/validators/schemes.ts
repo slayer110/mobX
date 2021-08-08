@@ -17,8 +17,6 @@ export const schemes = {
             })
             // TODO для примера
             .when('$objTest', (objTest, schema) => {
-                console.warn('objTest ', objTest);
-
                 if (schemesTest.isValidSync(objTest)) {
                     return schema.min(16);
                 }
@@ -36,7 +34,7 @@ export const schemes = {
 };
 
 const objTest = {
-    comment: 'objTestaaaaaaaasdasd',
+    comment: '',
     phoneNumber: '6213489898234',
 };
 const obj = {
@@ -44,7 +42,7 @@ const obj = {
     comment: 'aqeqweqaweqasdasdasdasdasdwe',
 };
 
-console.warn(
+/*console.warn(
     'b ',
     schemes.appeal
         .isValid(obj, {
@@ -58,4 +56,4 @@ console.warn(
         .catch((err) => {
             console.warn('common err ', err);
         })
-);
+);*/

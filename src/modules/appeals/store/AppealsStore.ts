@@ -49,6 +49,7 @@ export class AppealsStore {
         this.activePost = postId;
     }
 
+    // TODO подумать как правильнее обновлять
     public changeActiveAppeal(index: number): void {
         this.activeAppeals[this.activePost] = index;
     }

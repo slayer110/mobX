@@ -3,7 +3,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Form, FormSpy, Field } from 'react-final-form';
 import { OnChange, OnBlur } from 'react-final-form-listeners';
-import { MenuItem, FormControl, InputLabel, makeStyles, TextField } from '@material-ui/core';
+import { MenuItem, FormControl, InputLabel, makeStyles, TextField, Button } from '@material-ui/core';
 import { Select, TextField as TextFieldRff, Checkboxes, CheckboxData } from 'mui-rff';
 import createDecorator from 'final-form-focus';
 
@@ -14,6 +14,9 @@ import { schemes } from '../../validators/schemes';
 // interfaces
 import { IAppeal } from '../../interfaces';
 import { useEffect } from 'react';
+import { useStore } from 'store/use-store';
+import { RootStore, rootStore } from 'store/rootStore';
+import AutoSave from 'modules/appeals/ui/view/AutoSave';
 
 // TODO Фокус на поле с ошибкой при переходе между вкладками обращений
 
@@ -46,13 +49,14 @@ const useStyles = makeStyles(() => ({
 
 const focusOnErrors = createDecorator();
 const decorators = [focusOnErrors];
-
 const subscription = { pristine: true, submitting: true };
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // TODO Чтобы валидация действовала только для видимых полей.
 //  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
 export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible }) => {
-    const { comment, appealType } = activeAppeal;
+    const { comment, appealType, id } = activeAppeal;
     const classes = useStyles();
     // const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];
     let submit: any;
@@ -63,29 +67,26 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
         onSaveAppeal({ [name]: value });
     };
 
-    const handleSubmit = (data) => {
-        console.warn('dadsadas ', data);
-        // onSaveAppeal(data);
+    const handleSubmit = async (data) => {
+        console.warn('handleSubmit id = ', id, data);
+        await sleep(2000);
+        onSaveAppeal(data);
     };
-
-    useEffect(() => {
-        if (!isVisible) {
-            console.warn(123123123);
-            submit();
-        }
-    }, [isVisible]);
 
     return (
         <Form
-            subscription={subscription}
+            subscription={{}}
             onSubmit={handleSubmit}
-            // validate={validateFormValues(schemes.appeal)}
+            validate={validateFormValues(schemes.appeal)}
+            validateOnBlur
             decorators={decorators}
             render={({ handleSubmit }) => {
                 submit = handleSubmit;
                 return (
                     <form className={isVisible ? classes.wrapper : classes.hidden} onSubmit={handleSubmit}>
-                        <InputLabel>Статус</InputLabel>
+                        <InputLabel>
+                            Статус <AutoSave debounce={1000} save={handleSubmit} />
+                        </InputLabel>
                         <FormControl className={classes.field}>
                             <Select required fullWidth name="appealType">
                                 <MenuItem value="closedFirstLine">Закрыто</MenuItem>
@@ -100,17 +101,17 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                         </FormControl>
                         <InputLabel>Комментарий RFF</InputLabel>
                         <FormControl className={classes.field}>
-                            <TextFieldRff name="commentsadasd" multiline rows={7} />
+                            <TextFieldRff name="comment" multiline rows={7} />
                             {/*<OnChange name="comment">
                             {(value: any) => {
                                 handleChangeField({ name: 'comment', value });
                             }}
                         </OnChange>*/}
                             {/*<OnBlur name="comment">
-                            {(value: any) => {
-                                handleChangeField({ name: 'comment', value });
-                            }}
-                        </OnBlur>*/}
+                                {() => {
+                                    submit();
+                                }}
+                            </OnBlur>*/}
                         </FormControl>
 
                         <FormControl className={classes.field}>
@@ -169,9 +170,18 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                             onSaveAppeal(values);
                             return null;
                         }} />*/}
+                        <Button color="primary" onClick={handleSubmit}>
+                            Сабмит формы
+                        </Button>
                     </form>
                 );
             }}
         />
     );
 });
+
+setTimeout(() => {
+    /*rootStore.appealsStore.saveAppeal({
+        comment: '234359898gdufghuodfg'
+    });*/
+}, 5000);
