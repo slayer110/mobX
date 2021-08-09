@@ -10,6 +10,9 @@ import { IAppeals, IAppeal, IActiveAppeals } from 'interfaces';
 
 // constants
 import { event } from 'common/eventBus/event';
+import { validateSave } from 'modules/appeals/validators/validators';
+import { schemes } from 'modules/appeals/validators/schemes';
+import { submit } from 'modules/appeals/ui/view/AppealForm';
 
 const appeal = {
     id: uuidv4(),
@@ -25,6 +28,8 @@ export class AppealsStore {
     public activeAppeals: IActiveAppeals = {};
 
     public activePost = '';
+
+    public formsSubmit: any = {};
 
     public constructor() {
         makeAutoObservable(this);
@@ -62,8 +67,22 @@ export class AppealsStore {
         this.activeAppeals[postId] = initialActiveIndex;
     }
 
-    public addAppeal(): void {
-        this.activeAppealsByPost.push({ ...appeal, id: uuidv4() });
+    public async addAppeal(): any {
+        try {
+            this.formsSubmit[this.activeAppeal.id]().then(() => {
+                console.warn(1);
+            }).catch(() => {
+                console.warn(2);
+            });
+            this.activeAppealsByPost.push({ ...appeal, id: uuidv4() });
+            this.changeActiveAppeal(this.activeAppealsByPost.length - 1);
+        } catch (e) {
+            console.warn('add Appel', e);
+        }
+    }
+
+    public saveSubmit(appealId: string, submit: any) {
+        this.formsSubmit[appealId] = submit;
     }
 
     public get activeAppeal(): IAppeal {

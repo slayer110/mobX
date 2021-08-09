@@ -56,10 +56,6 @@ export class SaveFormStore {
 
     private async validateOtherForm(): Promise<void> {
         return Promise.resolve();
-
-        /* try {
-        } catch (e) {
-        } */
     }
 
     private async validate() {

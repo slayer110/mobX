@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 // internal
 import { useStore } from 'store/use-store';
 import { AppealsTabsList } from 'modules/appeals/ui/presenter/AppealsTabsList';
+import { submit } from 'modules/appeals/ui/view/AppealForm';
 
 const useStyles = makeStyles(() => ({
     addAppealButton: {
@@ -17,9 +18,22 @@ export const AppealsPresenter = observer(() => {
     const { appealsStore } = useStore();
     const classes = useStyles();
 
-    const handleAddAppeal = () => {
-        appealsStore.addAppeal();
-        appealsStore.changeActiveAppeal(appealsStore.activeAppealsByPost.length - 1);
+    const handleAddAppeal = (event) => {
+        try {
+            // TODO через store
+            /*submit(event).then(() => {
+                console.warn('handleAddAppeal = suc)');
+                appealsStore.addAppeal();
+                appealsStore.changeActiveAppeal(appealsStore.activeAppealsByPost.length - 1);
+            }).catch((e) => {
+                console.warn('handleAddAppeal = wwwwwwwwwwe', e);
+            });*/
+
+            appealsStore.addAppeal();
+            // appealsStore.changeActiveAppeal(appealsStore.activeAppealsByPost.length - 1);
+        } catch (e) {
+            console.warn('handleAddAppeal = e', e);
+        }
     };
 
     const handleSaveAppeal = (data: any) => {

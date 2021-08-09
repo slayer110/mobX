@@ -49,26 +49,26 @@ const useStyles = makeStyles(() => ({
 
 const focusOnErrors = createDecorator();
 const decorators = [focusOnErrors];
-const subscription = { pristine: true, submitting: true };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+export let submit: any;
+
+const forms = {};
+
+const formSubmits = (id: string) => async (data) => {
+    console.warn('formSubmits => ', id, data);
+};
+
 // TODO Чтобы валидация действовала только для видимых полей.
 //  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
-export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible }) => {
+export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible, onSaveSubmit }) => {
+    const { appealsStore } = useStore();
     const { comment, appealType, id } = activeAppeal;
     const classes = useStyles();
     // const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];
-    let submit: any;
-
-    const handleChangeField = (field: any) => {
-        const { name, value } = field;
-
-        onSaveAppeal({ [name]: value });
-    };
 
     const handleSubmit = async (data) => {
-        console.warn('handleSubmit id = ', id, data);
         await sleep(2000);
         onSaveAppeal(data);
     };
@@ -80,12 +80,17 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
             validate={validateFormValues(schemes.appeal)}
             validateOnBlur
             decorators={decorators}
+            initialValues={{
+                appealType,
+                comment,
+            }}
             render={({ handleSubmit }) => {
-                submit = handleSubmit;
+                appealsStore.saveSubmit(id, handleSubmit);
+
                 return (
                     <form className={isVisible ? classes.wrapper : classes.hidden} onSubmit={handleSubmit}>
                         <InputLabel>
-                            Статус <AutoSave debounce={1000} save={handleSubmit} />
+                            Статус <AutoSave debounce={500} save={handleSubmit} />
                         </InputLabel>
                         <FormControl className={classes.field}>
                             <Select required fullWidth name="appealType">
@@ -170,9 +175,6 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                             onSaveAppeal(values);
                             return null;
                         }} />*/}
-                        <Button color="primary" onClick={handleSubmit}>
-                            Сабмит формы
-                        </Button>
                     </form>
                 );
             }}
@@ -180,8 +182,12 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
     );
 });
 
-setTimeout(() => {
-    /*rootStore.appealsStore.saveAppeal({
-        comment: '234359898gdufghuodfg'
-    });*/
-}, 5000);
+// setTimeout(() => {
+//     rootStore.appealsStore.saveAppeal({
+//         comment: '234359898gdufghuodfg'
+//     });
+// }, 5000);
+
+// setInterval(() => {
+//     console.warn(forms);
+// }, 1000)
