@@ -38,16 +38,20 @@ export class SaveFormStore {
         }
     }
 
-    private async validateAppeals(): Promise<void> {
+    public async validateAppeals(): Promise<void> {
+        debugger;
         try {
+            console.warn('this.appealsStore.activeAppealsByPost ', this.appealsStore.activeAppealsByPost);
             await Promise.all(
                 this.appealsStore.activeAppealsByPost.map((appeal: IAppeal) => validateSave(schemes.appeal, appeal))
             );
         } catch (e) {
+            debugger;
             const appealIndex = this.appealsStore.activeAppealsByPost.findIndex((appeal) => appeal.id === e.value.id);
 
             if (appealIndex !== -1) {
                 this.appealsStore.changeActiveAppeal(appealIndex);
+                this.appealsStore.submitAppeal(e.value.id);
             }
 
             throw e;
@@ -61,7 +65,7 @@ export class SaveFormStore {
     private async validate() {
         try {
             await this.validateAppeals();
-            await this.validateOtherForm();
+            // await this.validateOtherForm();
         } catch (e) {
             console.warn('validate = ', e);
             console.error(e);

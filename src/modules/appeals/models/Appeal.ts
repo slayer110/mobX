@@ -1,7 +1,6 @@
 // external
 import { v4 as uuidv4 } from 'uuid';
 // interfaces
-import { IAppeal } from '../interfaces';
 
 export class Appeal {
     public id = uuidv4();

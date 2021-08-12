@@ -6,23 +6,24 @@ export const schemesTest = yup.object().shape({
 
 export const schemes = {
     appeal: yup.object().shape({
-        appealType: yup.string().required('Выберите поле'),
+        appealType: yup.string().notRequired(),
+        text: yup.string().trim().notRequired(),
         comment: yup
             .string()
             .trim()
             .when('appealType', {
                 is: 'expertise',
-                then: yup.string().min(11).notRequired(),
-                otherwise: yup.string().min(5, 'Введите минимум 5 симоволов').required('Заполните поле'),
+                then: yup.string().min(5, 'Введите минимум 5 симоволов').required('Заполните поле'),
+                otherwise: yup.string().required('1231231231'),
             })
             // TODO для примера
-            .when('$objTest', (objTest, schema) => {
+            /*.when('$objTest', (objTest, schema) => {
                 if (schemesTest.isValidSync(objTest)) {
                     return schema.min(16);
                 }
 
                 return schema.max(13);
-            }),
+            }),*/
         // .when('$comment', {
         //     is: '1111',
         //     then: (fieldSchema) => fieldSchema.required('qweqwqeweqweqwe'),
