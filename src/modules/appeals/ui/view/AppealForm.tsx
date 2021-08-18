@@ -75,13 +75,13 @@ const formSubmits = (id: string) => async (data) => {
 
 // TODO Чтобы валидация действовала только для видимых полей.
 //  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
-export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible, onSaveSubmit }) => {
+export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible, activePost, onSaveSubmit }) => {
     const { appealsStore } = useStore();
     const { comment, appealType, id } = activeAppeal;
     const classes = useStyles();
     // const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];
 
-    const onSubmit = values => {
+    const onSubmit = (values) => {
         // if (values.text !== 'finalformrocks') {
         //     return { [FORM_ERROR]: 'Login Failed' }
         // }
@@ -94,6 +94,7 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
             subscription={{}}
             onSubmit={onSubmit}
             decorators={decorators}
+            initialValues={{ comment: activeAppeal.comment, appealType: activeAppeal.appealType }}
             validate={validateFormValues(schemes.appeal)}
             render={({ handleSubmit }) => {
                 appealsStore.saveSubmit(id, handleSubmit);

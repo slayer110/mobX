@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
         },
     },
     active: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#808080',
     },
 }));
 
