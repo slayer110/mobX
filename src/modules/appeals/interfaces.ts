@@ -1,9 +1,10 @@
-import { Appeal } from './models/Appeal';
+import { Appeal } from 'modules/appeals/models/appeal';
 
 export interface IAppeal {
-    appealsType: string;
+    id: string;
+    appealType: string;
     comment: string;
-    competencesType: string;
+    competenceType: string;
     urgent: boolean;
 }
 
@@ -14,4 +15,3 @@ export interface IAppeals {
 export interface IActiveAppeals {
     [key: string]: number;
 }
-

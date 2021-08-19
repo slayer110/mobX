@@ -1,9 +1,12 @@
+// external
 import { createContext, useContext } from 'react';
 
-// @ts-ignore
-export const RootStoreContext: any = createContext();
+// internal
+import { RootStore } from 'store/rootStore';
 
-export const useStore = (): any => {
+export const RootStoreContext = createContext<RootStore | null>(null);
+
+export const useStore = (): RootStore => {
     const context = useContext(RootStoreContext);
 
     if (!context) {

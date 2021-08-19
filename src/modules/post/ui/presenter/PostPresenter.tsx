@@ -1,5 +1,5 @@
 // external
-import * as React from 'react';
+import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { makeStyles, Grid } from '@material-ui/core';
 
@@ -12,45 +12,32 @@ import DialogBoxPresenter from './DialogBoxPresenter';
 import { Post } from '../../models/Post';
 
 const useStyles = makeStyles(() => ({
-    PostTabsWrapper: {
-        height: '100%',
-        width: '120px',
-        backgroundColor: '#e6e9ed',
-        overflowY: 'auto',
-    },
     dialogBoxWrapper: {
         border: '2px solid black',
-        flexWrap: 'nowrap',
-        width: '100%',
-        minWidth: 600,
     },
 }));
 
-const PostPresenter = observer(() => {
+export const PostPresenter = observer(() => {
     const { postStore } = useStore();
     const classes = useStyles();
-    const { PostTabsWrapper, dialogBoxWrapper } = classes;
+    const { dialogBoxWrapper } = classes;
 
     return (
-        <>
-            <Grid container item alignContent="flex-start" className={PostTabsWrapper}>
+        <Grid container direction="row">
+            <Grid item lg={3}>
                 {postStore.posts.map((info: Post) => (
-                    <Grid item lg={12}>
+                    <Grid key={info.getId} item lg={12}>
                         <PostTabView
                             onChangePost={postStore.changeActivePost}
-                            key={info.getId}
                             info={info}
                             activeId={postStore.active}
                         />
                     </Grid>
                 ))}
             </Grid>
-
-            <Grid container item direction="column" className={dialogBoxWrapper}>
+            <Grid item lg={9} className={dialogBoxWrapper}>
                 <DialogBoxPresenter />
             </Grid>
-        </>
+        </Grid>
     );
 });
-
-export default React.memo(PostPresenter);
