@@ -17,7 +17,7 @@ const AddPostButton = (props: any) => {
 
     return (
         <Button onClick={handlerAddPost} style={style}>
-            Добавить чат
+            Добавить пост
         </Button>
     );
 };

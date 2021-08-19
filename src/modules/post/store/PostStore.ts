@@ -27,7 +27,7 @@ export class PostStore {
         const post = new Post();
         const postId = CommonUtils.generateRandomNumberInRange();
 
-        post.saveName(`${postId} Чат`);
+        post.saveName(`Пост №${postId} `);
         post.saveId(postId);
 
         if (this.posts.length === 0) {
