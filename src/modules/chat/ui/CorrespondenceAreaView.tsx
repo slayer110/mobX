@@ -1,5 +1,5 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../store/use-store';
 import { OrganizationView } from '../../../components/OrganizationView';
 import ErrorComponent from '../../../components/common/ErrorView';

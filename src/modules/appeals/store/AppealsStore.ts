@@ -1,15 +1,18 @@
-// internal
-import { Appeal } from '../models/Appeal';
-import { EventBus } from '../../../common/eventBus/eventBus';
-
 // external
 import { makeAutoObservable } from 'mobx';
+import { v4 as uuidv4 } from 'uuid';
+
+// internal
+import { EventBus } from 'common/eventBus/eventBus';
+import { appeal } from 'modules/appeals/models/appeal';
 
 // interfaces
-import { IAppeals, IActiveAppeals } from '../interfaces';
+import { IAppeals, IAppeal, IActiveAppeals } from 'interfaces';
 
 // constants
-import { event } from '../../../common/eventBus/event';
+import { event } from 'common/eventBus/event';
+import { validateSave } from 'modules/appeals/validators/validators';
+import { schemes } from 'modules/appeals/validators/schemes';
 
 export class AppealsStore {
     public appeals: IAppeals = {};
@@ -18,9 +21,11 @@ export class AppealsStore {
 
     public activePost = '';
 
+    public formsSubmit: any = {};
+
     public constructor() {
-        makeAutoObservable(this);
-        // TODO То, что приходится сохранять одно и то же во многих модулях
+        makeAutoObservable(this, { formsSubmit: false });
+        // TODO приходится сохранять одно и то же во многих модулях
         EventBus.subscribe(event.post.changeActiveId, (postId: string) => {
             this.saveActivePost(postId);
         });
@@ -29,14 +34,37 @@ export class AppealsStore {
         });
     }
 
-    public saveAppeal(data: Appeal): void {
-        this.activeAppeal.saveAppealFields(data);
+    public saveAppeal(data: IAppeal): void {
+        const obj = this.activeAppealsByPost[this.activeAppealIndex];
+        Object.assign(obj, this.activeAppeal, data);
+    }
+
+    public saveSubmit(appealId: string, submit: any) {
+        this.formsSubmit[appealId] = submit;
+    }
+
+    public formSubmit = (data: IAppeal) => {
+        console.warn('formSubmit => ', data);
+        this.saveAppeal(data);
+    };
+
+    public submitAppeal(id: string = '') {
+        try {
+            if (!id) {
+                return this.formsSubmit[this.activeAppeal.id]();
+            }
+
+            this.formsSubmit[id]();
+        } catch (e) {
+            console.warn('submit appeal', e);
+        }
     }
 
     public saveActivePost(postId: string): void {
         this.activePost = postId;
     }
 
+    // TODO подумать как правильнее обновлять
     public changeActiveAppeal(index: number): void {
         this.activeAppeals[this.activePost] = index;
     }
@@ -45,26 +73,64 @@ export class AppealsStore {
         const initialActiveIndex = 0;
 
         this.appeals[postId] = [];
-        // @ts-ignore
-        this.appeals[postId][initialActiveIndex] = new Appeal();
+        this.appeals[postId][initialActiveIndex] = { ...appeal };
         this.activeAppeals[postId] = initialActiveIndex;
     }
 
-    public addAppeal(): void {
-        const appeal = new Appeal();
+    public async validateAppeals(): Promise<void> {
+        try {
+            console.warn('validateAppeals start');
+            await Promise.all(this.activeAppealsByPost.map((appeal: IAppeal) => validateSave(schemes.appeal, appeal)));
+            console.warn('validateAppeals success');
+        } catch (e) {
+            console.warn('validateAppeals error', e);
+            debugger;
+            const appealIndex = this.activeAppealsByPost.findIndex((appeal) => appeal.id === e.value.id);
 
-        this.activePostAppeals.push(appeal);
+            if (appealIndex !== -1) {
+                console.warn('validateAppeals change', appealIndex);
+                this.changeActiveAppeal(appealIndex);
+                this.submitAppeal(e.value.id);
+                console.warn('validateAppeals submit');
+            }
+
+            throw e;
+        }
     }
 
-    public get activeAppeal(): Appeal {
-        return this.activePostAppeals[this.activeAppealIndex] || new Appeal();
+    public async addAppeal(): any {
+        try {
+            // this.formsSubmit[this.activeAppeal.id]().then((res) => {
+            //     console.warn(1, res);
+            //     this.activeAppealsByPost.push({ ...appeal, id: uuidv4() });
+            //     this.changeActiveAppeal(this.activeAppealsByPost.length - 1);
+            // });
+
+            console.warn('addAppeal start');
+            // TODO сабмитить надо все формы, надо все формы провалидировать и если все валидны, то добавлять вопрос
+            await this.validateAppeals();
+            console.warn('addAppeal success');
+            /*for (let appealId in this.formsSubmit) {
+                if (this.formsSubmit.hasOwnProperty(appealId)) {
+                    this.formsSubmit[appealId]();
+                }
+            }*/
+            this.activeAppealsByPost.push({ ...appeal, id: uuidv4() });
+            this.changeActiveAppeal(this.activeAppealsByPost.length - 1);
+        } catch (e) {
+            console.warn('error addAppeal ', e);
+        }
+    }
+
+    public get activeAppeal(): IAppeal {
+        return this.activeAppealsByPost[this.activeAppealIndex] || appeal;
     }
 
     public get activeAppealIndex(): number {
         return this.activeAppeals[this.activePost] || 0;
     }
 
-    public get activePostAppeals(): Appeal[] {
+    public get activeAppealsByPost(): IAppeal[] {
         return this.appeals[this.activePost] || [];
     }
 }
