@@ -1,6 +1,6 @@
 // external
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { FixedSizeList as DialogBoxArea } from 'react-window';
 import { makeStyles, Grid } from '@material-ui/core';
 

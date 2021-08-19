@@ -3,7 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 
 // internal
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 const useStyles = makeStyles(() => ({
     messageStyle: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useStore} from '../store/use-store';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 const appealsStyle: any = {
     width: '400px',
