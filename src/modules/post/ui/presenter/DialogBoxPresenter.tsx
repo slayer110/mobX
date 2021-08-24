@@ -1,17 +1,24 @@
 // external
-import React from 'react';
+import React, { Suspense } from 'react';
 import { observer } from 'mobx-react-lite';
-import { FixedSizeList as DialogBoxArea } from 'react-window';
 import { makeStyles, Grid } from '@material-ui/core';
 
 // internal
 import { useStore } from '../../../../store/use-store';
 import { MessageView } from '../../../../components/MessageView';
 import AddPostButton from '../../../../components/AddPostButton';
+import { FixedSizeList as DialogBoxArea } from 'react-window';
+import Messages from 'modules/post/ui/presenter/Messages';
+
+const MessagesLazy = React.lazy(() => import('./Messages'));
 
 const useStyles = makeStyles(() => ({
     dialogBox: {
+        backgroundColor: '#D3D3D3',
+    },
+    record: {
         border: '1px black solid',
+        backgroundColor: '#F5DEB3',
     },
     sendingMessageField: {
         height: '10%',
@@ -34,22 +41,27 @@ const DialogBoxPresenter = observer(() => {
 
     return (
         <>
-            <Grid item className={title}>
+            <Grid item className={classes.title}>
                 <h1>Список постов</h1>
-                <Grid item className={sendingMessageField}>
+                <Grid item className={classes.sendingMessageField}>
                     <AddPostButton handlerAddPost={postStore.addNewPost} />
                 </Grid>
             </Grid>
-            <Grid item>
-                <DialogBoxArea
-                    className={dialogBox}
-                    height={400}
-                    itemCount={messagesStore.activePostMessages.list.length}
-                    itemSize={10}
-                    width="100%"
-                >
-                    {Row}
-                </DialogBoxArea>
+            <Grid item className={classes.dialogBox}>
+                <Suspense fallback={<h1>Загрузка</h1>}>
+                    <MessagesLazy activePostMessages={messagesStore.activePostMessages.list} />
+                </Suspense>
+                <Messages activePostMessages={messagesStore.activePostMessages.list} />
+
+                {/*<DialogBoxArea*/}
+                {/*    className={classes.dialogBox}*/}
+                {/*    height={400}*/}
+                {/*    itemCount={messagesStore.activePostMessages.list.length}*/}
+                {/*    itemSize={10}*/}
+                {/*    width="100%"*/}
+                {/*>*/}
+                {/*    {Row}*/}
+                {/*</DialogBoxArea>*/}
             </Grid>
         </>
     );

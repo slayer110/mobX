@@ -23,12 +23,12 @@ export class PostStore {
         EventBus.publish(event.post.changeActiveId, this.active);
     };
 
-    public addNewPost = () => {
+    public addNewPost = (id: string) => {
         const post = new Post();
-        const postId = CommonUtils.generateRandomNumberInRange();
+        const postId = id && typeof id !== 'object' ? id : CommonUtils.generateRandomNumberInRange();
 
         post.saveName(`Пост №${postId} `);
-        post.saveId(postId);
+        post.saveId(String(postId));
 
         if (this.posts.length === 0) {
             this.active = post.getId;

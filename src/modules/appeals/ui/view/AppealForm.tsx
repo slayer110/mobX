@@ -5,7 +5,7 @@ import { Form, FormSpy, Field } from 'react-final-form';
 import { MenuItem, FormControl, InputLabel, makeStyles, TextField, Button } from '@material-ui/core';
 import { Select, TextField as TextFieldRff, Checkboxes, CheckboxData } from 'mui-rff';
 import createDecorator from 'final-form-focus';
-import { FORM_ERROR } from 'final-form'
+import { FORM_ERROR } from 'final-form';
 
 // internal
 import { validateFormValues } from 'modules/appeals/validators/validators';
@@ -65,7 +65,7 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
         // }
 
         appealsStore.saveAppeal(values);
-    }
+    };
 
     return (
         <Form

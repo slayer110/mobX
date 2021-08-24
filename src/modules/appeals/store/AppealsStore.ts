@@ -31,6 +31,8 @@ export class AppealsStore {
         });
         EventBus.subscribe(event.post.addNewChat, (postId: string) => {
             this.createAppeal(postId);
+            this.addAppealForManyPosts(postId);
+            this.changeActiveAppeal(0);
         });
     }
 
@@ -77,6 +79,15 @@ export class AppealsStore {
         this.activeAppeals[postId] = initialActiveIndex;
     }
 
+    public addAppealForManyPosts(postId: string): void {
+        for (let i = 0; i < 5; i += 1) {
+            this.appeals[postId].push({
+                ...appeal,
+                id: uuidv4(),
+            });
+        }
+    }
+
     public async validateAppeals(): Promise<void> {
         try {
             console.warn('validateAppeals start');
@@ -84,7 +95,6 @@ export class AppealsStore {
             console.warn('validateAppeals success');
         } catch (e) {
             console.warn('validateAppeals error', e);
-            debugger;
             const appealIndex = this.activeAppealsByPost.findIndex((appeal) => appeal.id === e.value.id);
 
             if (appealIndex !== -1) {
