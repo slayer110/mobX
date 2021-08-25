@@ -4,12 +4,10 @@ import { observer } from 'mobx-react-lite';
 import { makeStyles, Grid } from '@material-ui/core';
 
 // internal
-import PostTabView from '../view/PostTabView';
-import { useStore } from '../../../../store/use-store';
-import DialogBoxPresenter from './DialogBoxPresenter';
-
-// interfaces
-import { Post } from '../../models/Post';
+import PostTabView from 'modules/post/ui/view/PostTabView';
+import { useStore } from 'store/use-store';
+import { DialogBoxPresenter } from 'modules/post/ui/presenter/DialogBoxPresenter';
+import { Post } from 'modules/post/models/Post';
 
 const useStyles = makeStyles(() => ({
     dialogBoxWrapper: {

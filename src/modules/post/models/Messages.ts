@@ -1,5 +1,6 @@
 // external
 import { makeAutoObservable } from 'mobx';
+import { v4 as uuidv4 } from 'uuid';
 
 export class Messages {
     public list: string[] = [];
@@ -22,10 +23,9 @@ export class Messages {
     public saveList(list: any): void {
         this.isLoading = false;
         this.isSuccess = true;
-        this.list = list;
 
         for (let i = 0; i < 10000; i += 1) {
-            this.list.push(list);
+            this.list.push(uuidv4());
         }
     }
 
@@ -33,5 +33,9 @@ export class Messages {
         this.isLoading = false;
         this.isError = true;
         this.isSuccess = false;
+    }
+
+    public addMessages() {
+        this.list.push(uuidv4());
     }
 }

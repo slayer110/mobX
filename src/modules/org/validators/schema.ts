@@ -10,9 +10,6 @@ export const schema = yup.object().shape({
         .trim()
         .required('Обязательно заполните')
         .when('$appeal', (appeal, schema) => {
-
-            console.warn('appeal', appeal);
-
             if (appeal.comment === '111') {
                 return schema.max(2);
             }

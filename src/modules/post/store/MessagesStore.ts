@@ -2,17 +2,19 @@
 import { makeAutoObservable } from 'mobx';
 
 // internal
-import { messagesRestService } from '../services/MessagesRestService';
-import { EventBus } from '../../../common/eventBus/eventBus';
-import { Messages } from '../models/Messages';
+import { messagesRestService } from 'modules/post/services/MessagesRestService';
+import { EventBus } from 'common/eventBus/eventBus';
+import { Messages } from 'modules/post/models/Messages';
 
 // interfaces
 import { IMessagesByPost } from '../interfaces/interfaces';
 
 // constants
-import { event } from '../../../common/eventBus/event';
+import { event } from 'common/eventBus/event';
+import { v4 } from 'uuid';
 
-class MessagesStore {
+// TODO переделать как с вопросами
+export class MessagesStore {
     public messagesByPosts: IMessagesByPost = {};
 
     public activePost = '';
@@ -52,9 +54,12 @@ class MessagesStore {
     }
 
     public setScrollPosition(rowIndex: number): void {
-
         this.scrollPosition = rowIndex;
     }
-}
 
-export default MessagesStore;
+    public addMessages() {
+        setInterval(() => {
+            this.messagesByPosts[this.activePost].addMessages();
+        }, 2000);
+    }
+}

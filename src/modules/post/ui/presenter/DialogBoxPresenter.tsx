@@ -1,24 +1,31 @@
 // external
-import React, { Suspense } from 'react';
+import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { makeStyles, Grid } from '@material-ui/core';
-import { List as DialogReactVirtualizedBoxArea } from 'react-virtualized';
-import { FixedSizeList as DialogBoxArea } from 'react-window';
+import { makeStyles, Grid, Fab, Button } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { List as ReactVirtualized } from 'react-virtualized';
+import { FixedSizeList as ReactWindowVirtualized } from 'react-window';
 import 'react-virtualized/styles.css'; // only needs to be imported once
+import { Virtuoso } from 'react-virtuoso';
 
 // internal
-import { useStore } from '../../../../store/use-store';
-import { MessageView } from '../../../../components/MessageView';
-import AddPostButton from '../../../../components/AddPostButton';
+import { useStore } from 'store/use-store';
+import { MessageView } from 'components/MessageView';
+import AddPostButton from 'components/AddPostButton';
 import Messages from 'modules/post/ui/presenter/Messages';
 
 const useStyles = makeStyles(() => ({
+    container: {
+        height: '1000px',
+    },
     dialogBox: {
-        backgroundColor: '#D3D3D3',
+        backgroundColor: '#d3d3d3',
+        // TODO должен быть не фиксируемым
+        height: '200px',
     },
     record: {
         border: '1px black solid',
-        backgroundColor: '#F5DEB3',
+        backgroundColor: '#f5deb3',
     },
     sendingMessageField: {
         height: '10%',
@@ -28,17 +35,18 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const DialogBoxPresenter = observer(() => {
+export const DialogBoxPresenter = observer(() => {
     const { messagesStore, postStore }: any = useStore();
     const classes = useStyles();
-    const dialogBoxAreaRef = React.createRef();
-
     const { dialogBox, sendingMessageField, title } = classes;
+    const reactVirtualizedRef = React.createRef();
+    const reactWindowRef = React.createRef();
+    const reactVirtuosoRef = React.createRef();
 
     const Row = (obj: any) => {
-        const { style, index } = obj;
+        const { index } = obj;
 
-        return <MessageView style={style} message={`${messagesStore.activePostMessages.list[index]} ${index}`} />;
+        return <MessageView message={`${messagesStore.activePostMessages.list[index]} ${index}`} />;
     };
 
     const rowRenderer = (obj: any) => {
@@ -50,22 +58,58 @@ const DialogBoxPresenter = observer(() => {
     };
 
     return (
-        <>
+        <Grid container lg className={classes.container} direction="column">
             <Grid item className={classes.title}>
                 <h1>Список постов</h1>
                 <Grid item className={classes.sendingMessageField}>
                     <AddPostButton handlerAddPost={postStore.addNewPost} />
+                    <Button onClick={() => {
+                        messagesStore.addMessages();
+                    }} >
+                        Добавить сообщения
+                    </Button>
                 </Grid>
             </Grid>
             <Grid item className={classes.dialogBox}>
-                {/*<Suspense fallback={<h1>Загрузка</h1>}>*/}
-                {/*<MessagesLazy activePostMessages={messagesStore.activePostMessages.list} />*/}
-                {/*</Suspense>*/}
-
-                {/*react-virtualized*/}
-                <DialogReactVirtualizedBoxArea
-                    ref={dialogBoxAreaRef}
-                    width={700}
+                {/*{messagesStore.activePostMessages.list.map((item) => {
+                    return (
+                        <div key={item}>
+                            {item}
+                        </div>
+                    );
+                })}*/}
+                <h2>react-virtuoso</h2>
+                <Virtuoso
+                    ref={reactVirtuosoRef}
+                    data={messagesStore.activePostMessages.list}
+                    totalCount={messagesStore.activePostMessages.list.length}
+                    itemContent={(index, item) => {
+                        return <MessageView message={item} />;
+                    }}
+                    // followOutput="smooth"
+                />
+                <Fab
+                    color="primary"
+                    aria-label="add"
+                    onClick={() => {
+                        reactVirtuosoRef.current.scrollToIndex({
+                            index: messagesStore.activePostMessages.list.length - 1,
+                            behavior: 'smooth',
+                        });
+                    }}
+                >
+                    <AddIcon />
+                </Fab>
+            </Grid>
+            {/*<Grid item className={classes.dialogBox}>
+                <Suspense fallback={<h1>Загрузка</h1>}>
+                <MessagesLazy activePostMessages={messagesStore.activePostMessages.list} />
+                </Suspense>
+            </Grid>*/}
+            {/*<Grid item className={classes.dialogBox}>
+                <h2>react-virtualized</h2>
+                <ReactVirtualized
+                    ref={reactVirtualizedRef}
                     height={300}
                     rowCount={messagesStore.activePostMessages.list.length}
                     scrollToIndex={messagesStore.scrollPosition}
@@ -77,28 +121,7 @@ const DialogBoxPresenter = observer(() => {
                 >
                     Вниз
                 </button>
-
-                {/*react-window*/}
-                {/*<DialogBoxArea*/}
-                {/*    ref={dialogBoxAreaRef}*/}
-                {/*    className={classes.dialogBox}*/}
-                {/*    height={300}*/}
-                {/*    itemCount={messagesStore.activePostMessages.list.length}*/}
-                {/*    itemSize={20}*/}
-                {/*    width="100%"*/}
-                {/*>*/}
-                {/*    {Row}*/}
-                {/*</DialogBoxArea>*/}
-                {/*<button*/}
-                {/*    onClick={() =>*/}
-                {/*        dialogBoxAreaRef.current.scrollToItem(messagesStore.activePostMessages.list.length - 1)*/}
-                {/*    }*/}
-                {/*>*/}
-                {/*    Вниз*/}
-                {/*</button>*/}
-            </Grid>
-        </>
+            </Grid>*/}
+        </Grid>
     );
 });
-
-export default DialogBoxPresenter;

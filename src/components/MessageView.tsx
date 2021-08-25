@@ -1,32 +1,30 @@
 // external
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Grid } from '@material-ui/core';
 
 // internal
 import { observer } from 'mobx-react-lite';
+
+interface IProps {
+    message: string;
+}
 
 const useStyles = makeStyles(() => ({
     messageStyle: {
         border: '1px grey solid',
         height: '50px',
-        borderRadius: '10px',
         backgroundColor: '#FFFFFF',
+        margin: '5px',
     },
 }));
 
-interface IProps {
-    message: string;
-    style: any;
-}
-
 export const MessageView = observer((props: IProps) => {
-    const { message, style } = props;
+    const { message } = props;
     const classes = useStyles();
-    const { messageStyle } = classes;
 
     return (
-        <div className={messageStyle} style={style}>
+        <Grid item lg className={classes.messageStyle}>
             {message}
-        </div>
+        </Grid>
     );
 });

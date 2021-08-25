@@ -1,5 +1,5 @@
 import { PostStore } from 'modules/post/store/PostStore';
-import MessagesStore from '../modules/post/store/MessagesStore';
+import { MessagesStore } from 'modules/post/store/MessagesStore';
 import { AppealsStore } from 'modules/appeals/store/AppealsStore';
 import { SaveFormStore } from 'modules/saveForm/store/SaveFormStore';
 import { OrgStore } from 'modules/org/store/OrgStore';
