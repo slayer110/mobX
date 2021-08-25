@@ -24,7 +24,7 @@ export class Messages {
         this.isSuccess = true;
         this.list = list;
 
-        for (let i = 0; i < 1000; i += 1) {
+        for (let i = 0; i < 10000; i += 1) {
             this.list.push(list);
         }
     }

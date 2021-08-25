@@ -17,6 +17,8 @@ class MessagesStore {
 
     public activePost = '';
 
+    public scrollPosition = 0;
+
     public constructor() {
         makeAutoObservable(this);
         EventBus.subscribe(event.post.addNewChat, (postId: string) => {
@@ -47,6 +49,11 @@ class MessagesStore {
 
     public get activePostMessages(): Messages {
         return this.messagesByPosts[this.activePost] || new Messages();
+    }
+
+    public setScrollPosition(rowIndex: number): void {
+
+        this.scrollPosition = rowIndex;
     }
 }
 
