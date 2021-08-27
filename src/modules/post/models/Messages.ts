@@ -38,4 +38,8 @@ export class Messages {
     public addMessages() {
         this.list.push(uuidv4());
     }
+
+    public addMessagesToStart() {
+        this.list.unshift(uuidv4());
+    }
 }

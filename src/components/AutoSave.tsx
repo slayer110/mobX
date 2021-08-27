@@ -95,7 +95,7 @@ class AutoSaveComponent extends React.Component<IOwnProps> {
 }
 
 const AutoSaveComponent2 = React.memo<IOwnProps>((props) => {
-    const { values, debounce, onSave, initialState} = props;
+    const { values, debounce, onSave, initialState } = props;
     let timeout: any;
     const [valuesState, setValues] = useState(initialState);
 
@@ -148,7 +148,14 @@ const AutoSaveComponent2 = React.memo<IOwnProps>((props) => {
 export const AutoSave = (props: IProps) => {
     return (
         <FormSpy subscription={{ values: true }}>
-            {({ values }) => <AutoSaveComponent initialState={props.initialState} values={values} debounce={props.debounce} onSave={props.onSave} />}
+            {({ values }) => (
+                <AutoSaveComponent
+                    initialState={props.initialState}
+                    values={values}
+                    debounce={props.debounce}
+                    onSave={props.onSave}
+                />
+            )}
         </FormSpy>
     );
 };

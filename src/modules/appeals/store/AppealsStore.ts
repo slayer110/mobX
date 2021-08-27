@@ -1,13 +1,13 @@
 // external
 import { makeAutoObservable } from 'mobx';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 } from 'uuid';
 
 // internal
 import { EventBus } from 'common/eventBus/eventBus';
 import { appeal } from 'modules/appeals/models/appeal';
 
 // interfaces
-import { IAppeals, IAppeal, IActiveAppeals } from 'interfaces';
+import { IAppeals, IAppeal, IActiveAppeals } from 'modules/appeals/interfaces';
 
 // constants
 import { event } from 'common/eventBus/event';
@@ -79,15 +79,6 @@ export class AppealsStore {
         this.activeAppeals[postId] = initialActiveIndex;
     }
 
-    public addAppealForManyPosts(postId: string): void {
-        for (let i = 0; i < 5; i += 1) {
-            this.appeals[postId].push({
-                ...appeal,
-                id: uuidv4(),
-            });
-        }
-    }
-
     public async validateAppeals(): Promise<void> {
         try {
             console.warn('validateAppeals start');
@@ -125,7 +116,7 @@ export class AppealsStore {
                     this.formsSubmit[appealId]();
                 }
             }*/
-            this.activeAppealsByPost.push({ ...appeal, id: uuidv4() });
+            this.activeAppealsByPost.push({ ...appeal, id: v4() });
             this.changeActiveAppeal(this.activeAppealsByPost.length - 1);
         } catch (e) {
             console.warn('error addAppeal ', e);
@@ -142,5 +133,15 @@ export class AppealsStore {
 
     public get activeAppealsByPost(): IAppeal[] {
         return this.appeals[this.activePost] || [];
+    }
+
+    // TODO для проверки оптимизации
+    public addAppealForManyPosts(postId: string): void {
+        for (let i = 0; i < 5; i += 1) {
+            this.appeals[postId].push({
+                ...appeal,
+                id: v4(),
+            });
+        }
     }
 }

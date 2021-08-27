@@ -62,4 +62,8 @@ export class MessagesStore {
             this.messagesByPosts[this.activePost].addMessages();
         }, 2000);
     }
+
+    public addMessagesToStart() {
+        this.messagesByPosts[this.activePost].addMessagesToStart();
+    }
 }

@@ -1,6 +1,7 @@
 // external
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
+import { toJS } from 'mobx';
 import { makeStyles, Grid, Fab, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { List as ReactVirtualized } from 'react-virtualized';
@@ -39,8 +40,6 @@ export const DialogBoxPresenter = observer(() => {
     const { messagesStore, postStore }: any = useStore();
     const classes = useStyles();
     const { dialogBox, sendingMessageField, title } = classes;
-    const reactVirtualizedRef = React.createRef();
-    const reactWindowRef = React.createRef();
     const reactVirtuosoRef = React.createRef();
 
     const Row = (obj: any) => {
@@ -58,7 +57,7 @@ export const DialogBoxPresenter = observer(() => {
     };
 
     return (
-        <Grid container lg className={classes.container} direction="column">
+        <Grid container className={classes.container} direction="column">
             <Grid item className={classes.title}>
                 <h1>Список постов</h1>
                 <Grid item className={classes.sendingMessageField}>
@@ -81,10 +80,29 @@ export const DialogBoxPresenter = observer(() => {
                 <h2>react-virtuoso</h2>
                 <Virtuoso
                     ref={reactVirtuosoRef}
-                    data={messagesStore.activePostMessages.list}
+                    data={toJS(messagesStore.activePostMessages.list)}
                     totalCount={messagesStore.activePostMessages.list.length}
                     itemContent={(index, item) => {
                         return <MessageView message={item} />;
+                    }}
+                    components={{
+                        Header: () => {
+                            return (
+                                <div
+                                    style={{
+                                        padding: '2rem',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Button color="secondary" onClick={() => {
+                                        messagesStore.addMessagesToStart();
+                                    }}>
+                                        Загрузить ещё
+                                    </Button>
+                                </div>
+                            )
+                        }
                     }}
                     // followOutput="smooth"
                 />
