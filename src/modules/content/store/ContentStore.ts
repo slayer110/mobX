@@ -5,7 +5,7 @@ import { makeAutoObservable } from 'mobx';
 import { ETabContent } from 'modules/content/enums';
 
 export class ContentStore {
-    public activeTab: ETabContent = ETabContent.CLIENT_INFO;
+    public activeTab: ETabContent = ETabContent.APPEALS;
 
     public constructor() {
         makeAutoObservable(this);

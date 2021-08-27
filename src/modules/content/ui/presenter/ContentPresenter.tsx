@@ -31,9 +31,9 @@ export const ContentPresenter = observer(() => {
                     <Tab label="Обращения" value={ETabContent.APPEALS} />
                 </Tabs>
             </Grid>
-            <Grid item lg className={contentStore.activeTab !== ETabContent.CLIENT_INFO ? classes.hidden : ''}>
+            {/*<Grid item lg className={contentStore.activeTab !== ETabContent.CLIENT_INFO ? classes.hidden : ''}>
                 <OrgPresenter />
-            </Grid>
+            </Grid>*/}
             <div className={contentStore.activeTab !== ETabContent.APPEALS ? classes.hidden : ''}>
                 <AppealsWrapperPresenter />
             </div>

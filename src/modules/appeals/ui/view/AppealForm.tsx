@@ -18,6 +18,7 @@ import { IAppeal } from '../../interfaces';
 import { useEffect } from 'react';
 import { useStore } from 'store/use-store';
 import { RootStore, rootStore } from 'store/rootStore';
+import { toJS } from 'mobx';
 
 // TODO Фокус на поле с ошибкой при переходе между вкладками обращений
 
@@ -55,7 +56,7 @@ const decorators = [focusOnErrors];
 //  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
 export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible, activePost, onSaveSubmit }) => {
     const { appealsStore } = useStore();
-    const { comment, appealType, id } = activeAppeal;
+    const { comment, appealType, id, text } = activeAppeal;
     const classes = useStyles();
     // const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];
 
@@ -72,14 +73,15 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
             subscription={{}}
             onSubmit={onSubmit}
             decorators={decorators}
-            initialValues={{ comment, appealType }}
+            initialValues={{ comment, appealType, text }}
             validate={validateFormValues(schemes.appeal)}
+            validateOnBlur
             render={({ handleSubmit }) => {
                 appealsStore.saveSubmit(id, handleSubmit);
 
                 return (
                     <form className={isVisible ? classes.wrapper : classes.hidden} onSubmit={handleSubmit}>
-                        <AutoSave debounce={200} onSave={onSubmit} initialState={appeal} />
+                        <AutoSave debounce={200} onSave={onSubmit} initial={appeal} current={toJS(activeAppeal)} />
                         <InputLabel>Статус</InputLabel>
                         <FormControl className={classes.field}>
                             <Select fullWidth name="appealType">
@@ -96,12 +98,61 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                         <FormControl className={classes.field}>
                             <TextFieldRff name="text" multiline rows={7} />
                         </FormControl>
-                        <InputLabel>Текст RFF</InputLabel>
+                        <InputLabel>Текст1 RFF</InputLabel>
                         <FormControl className={classes.field}>
-                            <TextFieldRff name="fole.tert.l" rows={7} />
+                            <TextFieldRff name="text1" rows={7} />
                         </FormControl>
+                        <InputLabel>Текст2 RFF</InputLabel>
                         <FormControl className={classes.field}>
-                            <TextFieldRff name="fole.tert.io" rows={7} />
+                            <TextFieldRff name="text2" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст3 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text3" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст4 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text4" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text5" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text5" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text5" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text511" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text51" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text52" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text53" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text54" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text55" rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст5 RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text56" rows={7} />
                         </FormControl>
                         <Button
                             style={{ marginTop: '10px' }}
@@ -111,29 +162,7 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                         >
                             Добавить вопрос
                         </Button>
-                        <Button
-                            onClick={handleSubmit}
-                        >
-                            САБМИТ
-                        </Button>
-
-                        {/* {activeAppeal.appealType === 'expertise' && (
-                        <Select fullWidth name="competenceType">
-                            <MenuItem value="first">Первая компетенция</MenuItem>
-                            <MenuItem value="second">Вторая компетенция</MenuItem>
-                            <MenuItem value="third">Третья компетенция</MenuItem>
-                        </Select>
-                    )}
-                    {activeAppeal.appealType === 'complaint' && (
-                        <FormControl className={classes.field}>
-                            <Checkboxes data={checkboxData} name="urgent" />
-                            <OnChange name="urgent">
-                                {(value: any) => {
-                                    handleChangeField({ name: 'urgent', value: !!value[0] });
-                                }}
-                            </OnChange>
-                        </FormControl>
-                    )} */}
+                        <Button onClick={handleSubmit}>САБМИТ</Button>
                     </form>
                 );
             }}

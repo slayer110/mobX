@@ -7,7 +7,7 @@ export const schemesTest = yup.object().shape({
 export const schemes = {
     appeal: yup.object().shape({
         appealType: yup.string().required(),
-        text: yup.string().trim().required(),
+        text: yup.string().trim().notRequired(),
         comment: yup
             .string()
             .trim()

@@ -31,8 +31,7 @@ export class AppealsStore {
         });
         EventBus.subscribe(event.post.addNewChat, (postId: string) => {
             this.createAppeal(postId);
-            this.addAppealForManyPosts(postId);
-            this.changeActiveAppeal(0);
+            // this.addAppealForManyPosts(postId);
         });
     }
 
@@ -75,7 +74,7 @@ export class AppealsStore {
         const initialActiveIndex = 0;
 
         this.appeals[postId] = [];
-        this.appeals[postId][initialActiveIndex] = { ...appeal };
+        this.appeals[postId][initialActiveIndex] = { ...appeal, id: v4() };
         this.activeAppeals[postId] = initialActiveIndex;
     }
 
@@ -143,5 +142,6 @@ export class AppealsStore {
                 id: v4(),
             });
         }
+        this.changeActiveAppeal(0);
     }
 }

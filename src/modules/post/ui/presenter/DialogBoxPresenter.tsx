@@ -14,6 +14,7 @@ import { useStore } from 'store/use-store';
 import { MessageView } from 'components/MessageView';
 import AddPostButton from 'components/AddPostButton';
 import Messages from 'modules/post/ui/presenter/Messages';
+import { formsTable } from 'modules/appeals/models/appeal';
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -61,6 +62,11 @@ export const DialogBoxPresenter = observer(() => {
             <Grid item className={classes.title}>
                 <h1>Список постов</h1>
                 <Grid item className={classes.sendingMessageField}>
+                    <Button onClick={() => {
+                        console.warn('formsTable => ', formsTable);
+                    }}>
+                        Показать
+                    </Button>
                     <AddPostButton handlerAddPost={postStore.addNewPost} />
                     <Button onClick={() => {
                         messagesStore.addMessages();

@@ -4,37 +4,11 @@ import diff from 'object-diff';
 import isEqual from 'lodash.isequal';
 import { observer } from 'mobx-react-lite';
 
-const sanitizeEmptyValues = (initialValues: any, values: any) => {
-    if (!initialValues) {
-        return values;
-    }
-
-    const initialValuesWithEmptyFields = Object.keys(initialValues).reduce((acc: any, key: string) => {
-        if (key === 'urgent') {
-            debugger;
-        }
-
-        if (values[key] instanceof Date || Array.isArray(values[key])) {
-            acc[key] = values[key];
-        } else if (typeof values[key] === 'object' && values[key] !== null) {
-            acc[key] = sanitizeEmptyValues(initialValues[key], values[key]);
-        } else if (typeof values[key] === 'number') {
-            acc[key] = typeof values[key] === 'undefined' ? 0 : values[key];
-        } else if (typeof values[key] === 'boolean') {
-            acc[key] = typeof values[key] === 'undefined' ? false : values[key];
-        } else if (typeof values[key] === 'string') {
-            acc[key] = typeof values[key] === 'undefined' ? '' : values[key];
-        } else {
-            acc[key] = typeof values[key] === 'undefined' ? '' : values[key];
-        }
-        return acc;
-    }, {});
-
-    return Object.assign({}, initialValuesWithEmptyFields, values);
-};
+// todo
+import { formsTable } from 'modules/appeals/models/appeal';
 
 interface IProps {
-    initialState: any;
+    current: any;
     debounce: number;
     onSave: (values: any) => void;
 }
@@ -48,7 +22,10 @@ class AutoSaveComponent extends React.Component<IOwnProps> {
 
     constructor(props: IOwnProps) {
         super(props);
-        this.state = { values: props.initialState, submitting: false };
+        this.state = {
+            values: props.current,
+            submitting: false,
+        };
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps: Readonly<IOwnProps>) {
@@ -59,7 +36,7 @@ class AutoSaveComponent extends React.Component<IOwnProps> {
     }
 
     save = () => {
-        const { values, onSave, initialState } = this.props;
+        const { values, onSave, current, initial } = this.props;
 
         // This diff step is totally optional
         // let difference = sanitizeEmptyValues(
@@ -72,12 +49,18 @@ class AutoSaveComponent extends React.Component<IOwnProps> {
         // console.warn('AFTER difference  diff => ', difference);
         // debugger;
 
-        const obj = Object.assign({}, initialState, values);
-        let equesl = isEqual(this.state.values, obj);
-        // console.warn('obj', obj);
-        // console.warn('this.state.values', this.state.values);
-        // console.warn('isEqual', equesl);
+        const test = Object.assign({}, initial, values);
+        console.warn('changes', test);
+        const obj = Object.assign({}, current, test);
+        // let equesl = isEqual(this.state.values, obj);
+        let equesl = isEqual(current, obj);
+        console.warn('current', current);
+        console.warn('result', obj);
+        // console.warn('values', values);
+        console.warn('this.state.values', this.state.values);
+        console.warn('isEqual', equesl);
 
+        formsTable[obj.id] = obj;
         if (!equesl) {
             console.warn('AUTO SAVE CHANGED', obj);
             // values have changed
@@ -95,9 +78,9 @@ class AutoSaveComponent extends React.Component<IOwnProps> {
 }
 
 const AutoSaveComponent2 = React.memo<IOwnProps>((props) => {
-    const { values, debounce, onSave, initialState } = props;
+    const { values, debounce, onSave, current } = props;
     let timeout: any;
-    const [valuesState, setValues] = useState(initialState);
+    const [valuesState, setValues] = useState(current);
 
     const handleSaveValues = useCallback(() => {
         // This diff step is totally optional
@@ -111,11 +94,13 @@ const AutoSaveComponent2 = React.memo<IOwnProps>((props) => {
         // console.warn('AFTER difference  diff => ', difference);
         // debugger;
 
-        const obj = Object.assign({}, initialState, values);
+        const obj = Object.assign({}, current, values);
         let equesl = isEqual(valuesState, obj);
-        // console.warn('obj', obj);
-        // console.warn('this.state.values', this.state.values);
-        // console.warn('isEqual', equesl);
+        console.warn('initialState', current);
+        console.warn('values', values);
+        console.warn('obj', obj);
+        console.warn('this.state.values', this.state.values);
+        console.warn('isEqual', equesl);
 
         if (!equesl) {
             console.warn('AUTO SAVE CHANGED', obj);
@@ -150,7 +135,8 @@ export const AutoSave = (props: IProps) => {
         <FormSpy subscription={{ values: true }}>
             {({ values }) => (
                 <AutoSaveComponent
-                    initialState={props.initialState}
+                    initial={props.initial}
+                    current={props.current}
                     values={values}
                     debounce={props.debounce}
                     onSave={props.onSave}

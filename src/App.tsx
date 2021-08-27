@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 
 // internal
-import { PostPresenter } from './modules/post/ui/presenter/PostPresenter';
+import { PostPresenter } from 'modules/post/ui/presenter/PostPresenter';
 import { ContentPresenter } from 'modules/content/ui/presenter/ContentPresenter';
 import { CreatePostsAndAppeals } from 'CreatePostsAndAppeals';
 import { useStore } from 'store/use-store';
