@@ -54,9 +54,9 @@ const decorators = [focusOnErrors];
 
 // TODO Чтобы валидация действовала только для видимых полей.
 //  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
-export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisible, activePost, onSaveSubmit }) => {
+export const AppealForm = observer<IProps>(({ activeAppeal, isVisible }) => {
     const { appealsStore } = useStore();
-    const { comment, appealType, id, text } = activeAppeal;
+    const { comment, appealType, id, text, state } = activeAppeal;
     const classes = useStyles();
     // const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];
 
@@ -66,7 +66,29 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
         // }
 
         appealsStore.saveAppeal(values);
+        // TODO подумать, выглядит странно\костыльно
+        appealsStore.submitAppeal();
     };
+
+    // TODO
+    useEffect(() => {
+        console.log('id', id, state);
+        if (state !== 'IDLE') {
+            // TODO не делать при первом заходе
+            // appealsStore.submitAppeal();
+        }
+    }, [id]);
+
+    useEffect(() => {
+        if (state !== 'IDLE') {
+            console.log('MOUNT', id, state);
+            appealsStore.submitAppeal();
+        }
+
+        return () => {
+            console.log('UN MOUNT', id, state);
+        };
+    }, []);
 
     return (
         <Form
@@ -80,7 +102,7 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                 appealsStore.saveSubmit(id, handleSubmit);
 
                 return (
-                    <form className={isVisible ? classes.wrapper : classes.hidden} onSubmit={handleSubmit}>
+                    <div>
                         <AutoSave debounce={200} onSave={onSubmit} initial={appeal} current={toJS(activeAppeal)} />
                         <InputLabel>Статус</InputLabel>
                         <FormControl className={classes.field}>
@@ -155,7 +177,6 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                             <TextFieldRff name="text56" rows={7} />
                         </FormControl>
                         <Button
-                            style={{ marginTop: '10px' }}
                             onClick={() => {
                                 appealsStore.addAppeal();
                             }}
@@ -163,7 +184,7 @@ export const AppealForm = observer<IProps>(({ activeAppeal, onSaveAppeal, isVisi
                             Добавить вопрос
                         </Button>
                         <Button onClick={handleSubmit}>САБМИТ</Button>
-                    </form>
+                    </div>
                 );
             }}
         />

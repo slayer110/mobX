@@ -24,7 +24,7 @@ export class Messages {
         this.isLoading = false;
         this.isSuccess = true;
 
-        for (let i = 0; i < 10000; i += 1) {
+        for (let i = 0; i < 300; i += 1) {
             this.list.push(uuidv4());
         }
     }

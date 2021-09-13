@@ -1,13 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { FormSpy } from 'react-final-form';
-import diff from 'object-diff';
 import isEqual from 'lodash.isequal';
-import { observer } from 'mobx-react-lite';
-
-// todo
-import { formsTable } from 'modules/appeals/models/appeal';
 
 interface IProps {
+    initial: any;
     current: any;
     debounce: number;
     onSave: (values: any) => void;
@@ -52,21 +48,21 @@ class AutoSaveComponent extends React.Component<IOwnProps> {
         const test = Object.assign({}, initial, values);
         console.warn('changes', test);
         const obj = Object.assign({}, current, test);
+        // TODO как сделать в 1 заход?
         // let equesl = isEqual(this.state.values, obj);
         let equesl = isEqual(current, obj);
+        // Object.assign(obj, current);
         console.warn('current', current);
         console.warn('result', obj);
         // console.warn('values', values);
         console.warn('this.state.values', this.state.values);
         console.warn('isEqual', equesl);
 
-        formsTable[obj.id] = obj;
         if (!equesl) {
             console.warn('AUTO SAVE CHANGED', obj);
             // values have changed
             this.setState({ submitting: true, values: obj });
             onSave(obj);
-            this.setState({ submitting: false });
         }
     };
 

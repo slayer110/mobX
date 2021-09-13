@@ -22,15 +22,13 @@ export const AppealsPresenter = observer(() => {
     };
 
     return (
-        <>
-            <Grid item container direction="column">
-                <AppealsTabsList
-                    onSaveAppeal={handleSaveAppeal}
-                    changeActiveAppeal={handleChangeAppeal}
-                    appeals={appealsStore.activeAppealsByPost}
-                    activeIndex={appealsStore.activeAppealIndex}
-                />
-            </Grid>
-        </>
+        <Grid item container direction="column">
+            <AppealsTabsList
+                onSaveAppeal={handleSaveAppeal}
+                changeActiveAppeal={handleChangeAppeal}
+                appeals={appealsStore.activeAppealsByPost}
+                activeIndex={appealsStore.activeAppealIndex}
+            />
+        </Grid>
     );
 });

@@ -31,13 +31,20 @@ export class AppealsStore {
         });
         EventBus.subscribe(event.post.addNewChat, (postId: string) => {
             this.createAppeal(postId);
+            // TODO
             // this.addAppealForManyPosts(postId);
         });
     }
 
     public saveAppeal(data: IAppeal): void {
         const obj = this.activeAppealsByPost[this.activeAppealIndex];
-        Object.assign(obj, this.activeAppeal, data);
+
+        // data.state = 'CHANGED';
+
+        Object.assign(obj, this.activeAppeal, {
+            ...data,
+            state: 'CHANGED',
+        });
     }
 
     public saveSubmit(appealId: string, submit: any) {
@@ -74,7 +81,7 @@ export class AppealsStore {
         const initialActiveIndex = 0;
 
         this.appeals[postId] = [];
-        this.appeals[postId][initialActiveIndex] = { ...appeal, id: v4() };
+        this.appeals[postId][initialActiveIndex] = { ...appeal, id: v4(), state: 'IDLE' };
         this.activeAppeals[postId] = initialActiveIndex;
     }
 
@@ -115,7 +122,7 @@ export class AppealsStore {
                     this.formsSubmit[appealId]();
                 }
             }*/
-            this.activeAppealsByPost.push({ ...appeal, id: v4() });
+            this.activeAppealsByPost.push({ ...appeal, id: v4(), state: 'IDLE' });
             this.changeActiveAppeal(this.activeAppealsByPost.length - 1);
         } catch (e) {
             console.warn('error addAppeal ', e);

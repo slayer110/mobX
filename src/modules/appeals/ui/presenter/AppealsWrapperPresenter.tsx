@@ -28,7 +28,7 @@ export const AppealsWrapperPresenter = observer(() => {
             <Grid item lg>
                 <Button onClick={handleAddAppeal}>Добавить вопрос</Button>
             </Grid>
-            <Grid item lg={12}>
+            <Grid item lg>
                 <Button color="primary" onClick={handleSaveForm}>
                     Сохранить
                 </Button>

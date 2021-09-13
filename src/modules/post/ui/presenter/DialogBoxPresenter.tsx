@@ -4,17 +4,12 @@ import { observer } from 'mobx-react-lite';
 import { toJS } from 'mobx';
 import { makeStyles, Grid, Fab, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { List as ReactVirtualized } from 'react-virtualized';
-import { FixedSizeList as ReactWindowVirtualized } from 'react-window';
-import 'react-virtualized/styles.css'; // only needs to be imported once
 import { Virtuoso } from 'react-virtuoso';
 
 // internal
 import { useStore } from 'store/use-store';
 import { MessageView } from 'components/MessageView';
 import AddPostButton from 'components/AddPostButton';
-import Messages from 'modules/post/ui/presenter/Messages';
-import { formsTable } from 'modules/appeals/models/appeal';
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -43,46 +38,22 @@ export const DialogBoxPresenter = observer(() => {
     const { dialogBox, sendingMessageField, title } = classes;
     const reactVirtuosoRef = React.createRef();
 
-    const Row = (obj: any) => {
-        const { index } = obj;
-
-        return <MessageView message={`${messagesStore.activePostMessages.list[index]} ${index}`} />;
-    };
-
-    const rowRenderer = (obj: any) => {
-        const { key, style, index } = obj;
-
-        return (
-            <MessageView message={`${messagesStore.activePostMessages.list[index]} ${index}`} style={style} key={key} />
-        );
-    };
-
     return (
         <Grid container className={classes.container} direction="column">
             <Grid item className={classes.title}>
                 <h1>Список постов</h1>
                 <Grid item className={classes.sendingMessageField}>
-                    <Button onClick={() => {
-                        console.warn('formsTable => ', formsTable);
-                    }}>
-                        Показать
-                    </Button>
                     <AddPostButton handlerAddPost={postStore.addNewPost} />
-                    <Button onClick={() => {
-                        messagesStore.addMessages();
-                    }} >
+                    <Button
+                        onClick={() => {
+                            messagesStore.addMessages();
+                        }}
+                    >
                         Добавить сообщения
                     </Button>
                 </Grid>
             </Grid>
             <Grid item className={classes.dialogBox}>
-                {/*{messagesStore.activePostMessages.list.map((item) => {
-                    return (
-                        <div key={item}>
-                            {item}
-                        </div>
-                    );
-                })}*/}
                 <h2>react-virtuoso</h2>
                 <Virtuoso
                     ref={reactVirtuosoRef}
@@ -94,23 +65,17 @@ export const DialogBoxPresenter = observer(() => {
                     components={{
                         Header: () => {
                             return (
-                                <div
-                                    style={{
-                                        padding: '2rem',
-                                        display: 'flex',
-                                        justifyContent: 'center',
+                                <Button
+                                    color="secondary"
+                                    onClick={() => {
+                                        messagesStore.addMessagesToStart();
                                     }}
                                 >
-                                    <Button color="secondary" onClick={() => {
-                                        messagesStore.addMessagesToStart();
-                                    }}>
-                                        Загрузить ещё
-                                    </Button>
-                                </div>
-                            )
-                        }
+                                    Загрузить ещё
+                                </Button>
+                            );
+                        },
                     }}
-                    // followOutput="smooth"
                 />
                 <Fab
                     color="primary"
@@ -125,27 +90,6 @@ export const DialogBoxPresenter = observer(() => {
                     <AddIcon />
                 </Fab>
             </Grid>
-            {/*<Grid item className={classes.dialogBox}>
-                <Suspense fallback={<h1>Загрузка</h1>}>
-                <MessagesLazy activePostMessages={messagesStore.activePostMessages.list} />
-                </Suspense>
-            </Grid>*/}
-            {/*<Grid item className={classes.dialogBox}>
-                <h2>react-virtualized</h2>
-                <ReactVirtualized
-                    ref={reactVirtualizedRef}
-                    height={300}
-                    rowCount={messagesStore.activePostMessages.list.length}
-                    scrollToIndex={messagesStore.scrollPosition}
-                    rowHeight={20}
-                    rowRenderer={rowRenderer}
-                />
-                <button
-                    onClick={() => messagesStore.setScrollPosition(messagesStore.activePostMessages.list.length - 1)}
-                >
-                    Вниз
-                </button>
-            </Grid>*/}
         </Grid>
     );
 });

@@ -16,6 +16,15 @@ export const validateFormValues = (schema: any, context?: any) => async (values:
             abortEarly: false,
         });
     } catch (error) {
+
+        // const errors = error.inner.reduce((formError, innerError) => ({
+        //     ...formError,
+        //     [innerError.path]: innerError.message
+        // }), {})
+        // console.log('asd error', errors);
+        //
+        // return errors
+
         return error.inner.reduce(
             (formError: any, innerError: any) => setIn(formError, innerError.path, innerError.message),
             {}
