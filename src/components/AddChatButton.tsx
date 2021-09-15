@@ -1,5 +1,4 @@
 import React from 'react';
-import '../App.css';
 
 const style: any = {
     border: '2px grey solid',

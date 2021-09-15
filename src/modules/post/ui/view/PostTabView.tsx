@@ -2,44 +2,30 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
+import { observer } from 'mobx-react-lite';
 
 // internal
-import '../../../../App.css';
 import { Post } from '../../models/Post';
 
 const useStyles = makeStyles(() => ({
-    tab: {
-        height: '100px',
-        width: '100%',
-        borderBottom: '1px solid #b5b5b5',
-        borderTop: '1px solid #b5b5b5',
-        fontSize: '16px',
-        cursor: 'pointer',
-        '&:hover': {
-            backgroundColor: '#eff2f6',
-        },
-    },
     active: {
-        backgroundColor: '#808080',
+        backgroundColor: '#4f9a9898',
     },
 }));
 
 interface IProps {
-    info: Post;
-    onChangePost: (id: string) => void;
-    activeId: string;
+    isActive: boolean;
+    post: Post;
+    onChangePost: () => void;
 }
 
-const PostTabView = (props: IProps) => {
-    const { info, onChangePost, activeId } = props;
+export const PostTabView = observer((props: IProps) => {
+    const { post, onChangePost, isActive } = props;
     const classes = useStyles();
-    const { tab, active } = classes;
 
     return (
-        <Button onClick={() => onChangePost(info.getId)} className={`${tab} ${info.getId === activeId && active}`}>
-            {info.getName}
+        <Button className={isActive ? classes.active : ''} onClick={onChangePost}>
+            {post.getName}
         </Button>
     );
-};
-
-export default React.memo(PostTabView);
+});

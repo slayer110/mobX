@@ -9,7 +9,7 @@ import { Virtuoso } from 'react-virtuoso';
 // internal
 import { useStore } from 'store/use-store';
 import { MessageView } from 'components/MessageView';
-import AddPostButton from 'components/AddPostButton';
+import { useCallback } from 'react';
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -35,22 +35,29 @@ const useStyles = makeStyles(() => ({
 export const DialogBoxPresenter = observer(() => {
     const { messagesStore, postStore }: any = useStore();
     const classes = useStyles();
-    const { dialogBox, sendingMessageField, title } = classes;
     const reactVirtuosoRef = React.createRef();
+
+    const handleAddPost = useCallback(
+        () => () => {
+            postStore.addNewPost();
+        },
+        []
+    );
+
+    const handleAddMessages = useCallback(
+        () => () => {
+            messagesStore.addMessages();
+        },
+        []
+    );
 
     return (
         <Grid container className={classes.container} direction="column">
             <Grid item className={classes.title}>
                 <h1>Список постов</h1>
                 <Grid item className={classes.sendingMessageField}>
-                    <AddPostButton handlerAddPost={postStore.addNewPost} />
-                    <Button
-                        onClick={() => {
-                            messagesStore.addMessages();
-                        }}
-                    >
-                        Добавить сообщения
-                    </Button>
+                    <Button onClick={handleAddPost}>Добавить пост</Button>
+                    <Button onClick={handleAddMessages}>Добавить сообщения</Button>
                 </Grid>
             </Grid>
             <Grid item className={classes.dialogBox}>

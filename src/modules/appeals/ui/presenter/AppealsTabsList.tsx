@@ -1,40 +1,34 @@
 // external
 import React from 'react';
-import { Tabs, Tab, Button, Grid, makeStyles } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 
 // internal
-import { Appeal } from 'modules/appeals/models/appeal';
 import { AppealForm } from 'modules/appeals/ui/view/AppealForm';
+import { AppealsTabs } from 'modules/appeals/ui/presenter/AppealsTabs';
 
 interface IOwnProps {
     appeals: any;
     activeIndex: number;
     onSaveAppeal: any;
-    changeActiveAppeal: any;
+    onChangeAppeal: any;
 }
 
-export const AppealsTabsList = observer<IOwnProps>(({ appeals, activeIndex, onSaveAppeal, changeActiveAppeal }) => {
-    const handleChangeAppeal = (event: React.ChangeEvent<any>, value: number) => {
-        changeActiveAppeal(value);
-    };
-
+export const AppealsTabsList = observer<IOwnProps>(({ appeals, activeIndex, onSaveAppeal, onChangeAppeal }) => {
     return (
         <>
             <Grid item lg>
-                <Tabs value={activeIndex} onChange={handleChangeAppeal}>
-                    {appeals.map((appeal: Appeal, index: number) => (
-                        <Tab key={appeal.id} label={`${index + 1}-вопрос`} />
-                    ))}
-                </Tabs>
+                <AppealsTabs appeals={appeals} activeIndex={activeIndex} onChangeAppeal={onChangeAppeal} />
             </Grid>
             <Grid item lg={2}>
-                {appeals[activeIndex] && <AppealForm
-                    key={appeals[activeIndex].id}
-                    isVisible={true}
-                    activeAppeal={appeals[activeIndex]}
-                    onSaveAppeal={onSaveAppeal}
-                />}
+                {appeals[activeIndex] && (
+                    <AppealForm
+                        key={appeals[activeIndex].id}
+                        isVisible={true}
+                        activeAppeal={appeals[activeIndex]}
+                        onSaveAppeal={onSaveAppeal}
+                    />
+                )}
                 {/*{appeals.map((appeal: Appeal, index: number) => (
                     <AppealForm
                         key={appeal.id}

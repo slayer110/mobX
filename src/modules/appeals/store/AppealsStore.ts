@@ -28,11 +28,13 @@ export class AppealsStore {
         // TODO приходится сохранять одно и то же во многих модулях
         EventBus.subscribe(event.post.changeActiveId, (postId: string) => {
             this.saveActivePost(postId);
+            // this.createAppeal(postId);
         });
         EventBus.subscribe(event.post.addNewChat, (postId: string) => {
+
             this.createAppeal(postId);
             // TODO
-            // this.addAppealForManyPosts(postId);
+            this.addAppealForManyPosts(postId);
         });
     }
 
@@ -78,11 +80,9 @@ export class AppealsStore {
     }
 
     public createAppeal(postId: string): void {
-        const initialActiveIndex = 0;
-
         this.appeals[postId] = [];
-        this.appeals[postId][initialActiveIndex] = { ...appeal, id: v4(), state: 'IDLE' };
-        this.activeAppeals[postId] = initialActiveIndex;
+        this.appeals[postId].push({ ...appeal, id: v4(), state: 'IDLE' });
+        this.activeAppeals[postId] = 0;
     }
 
     public async validateAppeals(): Promise<void> {

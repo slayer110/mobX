@@ -10,4 +10,8 @@ export class EventBus {
     public static publish(event: string, data: unknown) {
         return PubSub.publish(event, data);
     }
+
+    public static publishSync(event: string, data: unknown) {
+        return PubSub.publishSync(event, data);
+    }
 }

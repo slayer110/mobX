@@ -27,16 +27,14 @@ export const ContentPresenter = observer(() => {
         <Grid container direction="column">
             <Grid item lg>
                 <Tabs value={contentStore.activeTab} onChange={handleChangeTab}>
-                    {/*<Tab label="О клиенте" value={ETabContent.CLIENT_INFO} />*/}
+                    <Tab label="О клиенте" value={ETabContent.CLIENT_INFO} />
                     <Tab label="Обращения" value={ETabContent.APPEALS} />
                 </Tabs>
             </Grid>
-            {/*<Grid item lg className={contentStore.activeTab !== ETabContent.CLIENT_INFO ? classes.hidden : ''}>
-                <OrgPresenter />
-            </Grid>*/}
-            <div className={contentStore.activeTab !== ETabContent.APPEALS ? classes.hidden : ''}>
-                <AppealsWrapperPresenter />
-            </div>
+            <Grid item lg>
+                {contentStore.activeTab === ETabContent.CLIENT_INFO && <OrgPresenter />}
+                {contentStore.activeTab === ETabContent.APPEALS && <AppealsWrapperPresenter />}
+            </Grid>
         </Grid>
     );
 });

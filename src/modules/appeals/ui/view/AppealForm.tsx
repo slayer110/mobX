@@ -5,7 +5,6 @@ import { Form, FormSpy, Field } from 'react-final-form';
 import { MenuItem, FormControl, InputLabel, makeStyles, TextField, Button } from '@material-ui/core';
 import { Select, TextField as TextFieldRff, Checkboxes, CheckboxData } from 'mui-rff';
 import createDecorator from 'final-form-focus';
-import { FORM_ERROR } from 'final-form';
 
 // internal
 import { validateFormValues } from 'modules/appeals/validators/validators';
@@ -17,7 +16,6 @@ import { appeal } from 'modules/appeals/models/appeal';
 import { IAppeal } from '../../interfaces';
 import { useEffect } from 'react';
 import { useStore } from 'store/use-store';
-import { RootStore, rootStore } from 'store/rootStore';
 import { toJS } from 'mobx';
 
 // TODO Фокус на поле с ошибкой при переходе между вкладками обращений
@@ -54,7 +52,7 @@ const decorators = [focusOnErrors];
 
 // TODO Чтобы валидация действовала только для видимых полей.
 //  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
-export const AppealForm = observer<IProps>(({ activeAppeal, isVisible }) => {
+export const AppealForm = observer<IProps>(({ activeAppeal}) => {
     const { appealsStore } = useStore();
     const { comment, appealType, id, text, state } = activeAppeal;
     const classes = useStyles();
@@ -64,30 +62,14 @@ export const AppealForm = observer<IProps>(({ activeAppeal, isVisible }) => {
         // if (values.text !== 'finalformrocks') {
         //     return { [FORM_ERROR]: 'Login Failed' }
         // }
-
         appealsStore.saveAppeal(values);
-        // TODO подумать, выглядит странно\костыльно
-        appealsStore.submitAppeal();
     };
-
-    // TODO
-    useEffect(() => {
-        console.log('id', id, state);
-        if (state !== 'IDLE') {
-            // TODO не делать при первом заходе
-            // appealsStore.submitAppeal();
-        }
-    }, [id]);
 
     useEffect(() => {
         if (state !== 'IDLE') {
             console.log('MOUNT', id, state);
             appealsStore.submitAppeal();
         }
-
-        return () => {
-            console.log('UN MOUNT', id, state);
-        };
     }, []);
 
     return (
@@ -103,79 +85,6 @@ export const AppealForm = observer<IProps>(({ activeAppeal, isVisible }) => {
 
                 return (
                     <div>
-                        <AutoSave debounce={200} onSave={onSubmit} initial={appeal} current={toJS(activeAppeal)} />
-                        <InputLabel>Статус</InputLabel>
-                        <FormControl className={classes.field}>
-                            <Select fullWidth name="appealType">
-                                <MenuItem value="closedFirstLine">Закрыто</MenuItem>
-                                <MenuItem value="complaint">Открыто</MenuItem>
-                                <MenuItem value="expertise">Прикройте</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <InputLabel>Комментарий RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="comment" multiline rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text" multiline rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст1 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text1" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст2 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text2" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст3 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text3" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст4 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text4" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text5" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text5" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text5" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text511" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text51" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text52" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text53" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text54" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text55" rows={7} />
-                        </FormControl>
-                        <InputLabel>Текст5 RFF</InputLabel>
-                        <FormControl className={classes.field}>
-                            <TextFieldRff name="text56" rows={7} />
-                        </FormControl>
                         <Button
                             onClick={() => {
                                 appealsStore.addAppeal();
@@ -184,19 +93,26 @@ export const AppealForm = observer<IProps>(({ activeAppeal, isVisible }) => {
                             Добавить вопрос
                         </Button>
                         <Button onClick={handleSubmit}>САБМИТ</Button>
+                        <AutoSave debounce={200} onSave={onSubmit} initial={appeal} current={toJS(activeAppeal)} />
+                        {/*<InputLabel>Статус</InputLabel>
+                        <FormControl className={classes.field}>
+                            <Select fullWidth name="appealType">
+                                <MenuItem value="closedFirstLine">Закрыто</MenuItem>
+                                <MenuItem value="complaint">Открыто</MenuItem>
+                                <MenuItem value="expertise">Прикройте</MenuItem>
+                            </Select>
+                        </FormControl>*/}
+                        <InputLabel>Комментарий RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="comment" multiline rows={7} />
+                        </FormControl>
+                        <InputLabel>Текст RFF</InputLabel>
+                        <FormControl className={classes.field}>
+                            <TextFieldRff name="text" multiline rows={7} />
+                        </FormControl>
                     </div>
                 );
             }}
         />
     );
 });
-
-// setTimeout(() => {
-//     rootStore.appealsStore.saveAppeal({
-//         comment: '234359898gdufghuodfg'
-//     });
-// }, 5000);
-
-// setInterval(() => {
-//     console.warn(forms);
-// }, 1000)
