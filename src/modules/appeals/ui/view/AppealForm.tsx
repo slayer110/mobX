@@ -20,30 +20,10 @@ import { toJS } from 'mobx';
 
 // TODO Фокус на поле с ошибкой при переходе между вкладками обращений
 
-interface IProps {
-    activeAppeal: IAppeal;
-    onSaveAppeal: (info: { [key: string]: string }) => void;
-    isVisible: boolean;
-}
-
-interface IFormValues {
-    appealType: string;
-    comment: string;
-}
-
 const useStyles = makeStyles(() => ({
-    hidden: {
-        display: 'none',
-    },
     field: {
         width: '100%',
         marginBottom: '30px',
-    },
-    wrapper: {
-        marginTop: '30px',
-    },
-    error: {
-        color: 'red',
     },
 }));
 
@@ -52,8 +32,9 @@ const decorators = [focusOnErrors];
 
 // TODO Чтобы валидация действовала только для видимых полей.
 //  Сейчас если выбрать из выпадающего списка пункт, который не подразумевает видимость поля "Комментарий" и запустить проверку, поле "Комментарий" будет тоже валидироваться
-export const AppealForm = observer<IProps>(({ activeAppeal}) => {
+export const AppealForm = observer(() => {
     const { appealsStore } = useStore();
+    const activeAppeal = appealsStore.activeAppeal;
     const { comment, appealType, id, text, state } = activeAppeal;
     const classes = useStyles();
     // const checkboxData: CheckboxData[] = [{ label: 'Важность вопроса', value: true }];

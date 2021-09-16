@@ -25,7 +25,7 @@ export const ContentPresenter = observer(() => {
 
     return (
         <Grid container direction="column">
-            <Grid item lg>
+            <Grid item lg={6}>
                 <Tabs value={contentStore.activeTab} onChange={handleChangeTab}>
                     <Tab label="О клиенте" value={ETabContent.CLIENT_INFO} />
                     <Tab label="Обращения" value={ETabContent.APPEALS} />

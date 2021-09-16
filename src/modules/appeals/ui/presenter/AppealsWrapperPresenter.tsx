@@ -26,12 +26,14 @@ export const AppealsWrapperPresenter = observer(() => {
         <Grid container direction="column">
             <Grid item lg={12}>
                 <Grid container direction="column">
-                    <AppealsTabsList
-                        activeIndex={appealsStore.activeAppealIndex}
-                        appeals={appealsStore.activeAppealsByPost}
-                        onSaveAppeal={handleSaveAppeal}
-                        onChangeAppeal={handleChangeAppeal}
-                    />
+                    {appealsStore.activeAppealsByPost.length > 0 && (
+                        <AppealsTabsList
+                            activeIndex={appealsStore.activeAppealIndex}
+                            appeals={appealsStore.activeAppealsByPost}
+                            onSaveAppeal={handleSaveAppeal}
+                            onChangeAppeal={handleChangeAppeal}
+                        />
+                    )}
                 </Grid>
             </Grid>
             <Grid item lg={2}>

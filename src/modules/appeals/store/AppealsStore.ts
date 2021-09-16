@@ -143,7 +143,7 @@ export class AppealsStore {
 
     // TODO для проверки оптимизации
     public addAppealForManyPosts(postId: string): void {
-        for (let i = 0; i < 5; i += 1) {
+        for (let i = 1; i <= 15; i += 1) {
             this.appeals[postId].push({
                 ...appeal,
                 id: v4(),
